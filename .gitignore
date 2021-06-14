@@ -1,4 +1,5 @@
 # User-specific stuff
+server/
 .idea/
 
 *.iml
@@ -111,6 +112,3 @@ buildNumber.properties
 
 # Common working directory
 run/
-
-# Minecraft Server
-server/
