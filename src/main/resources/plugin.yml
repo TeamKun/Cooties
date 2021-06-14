@@ -1,0 +1,8 @@
+name: Cooties
+version: ${project.version}
+main: net.kunmc.lab.cooties.Cooties
+api-version: 1.16
+prefix: Cooties
+authors: [ POne0301 ]
+description: 〇〇菌プラグイン
+website: https://github.com/TeamKun/Cooties
