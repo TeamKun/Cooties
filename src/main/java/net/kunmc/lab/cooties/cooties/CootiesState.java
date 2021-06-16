@@ -1,6 +1,6 @@
 package net.kunmc.lab.cooties.cooties;
 
-class CootiesBase {
+class CootiesBase{
     String name;
     int time;
 
