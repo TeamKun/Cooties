@@ -1,6 +1,6 @@
 package net.kunmc.lab.cooties.cooties;
 
-import org.checkerframework.checker.units.qual.C;
+import org.bukkit.entity.Player;
 
 public class CootiesContext {
     CootiesInterface ci;
@@ -8,7 +8,7 @@ public class CootiesContext {
         this.ci = ci;
     }
 
-    public void runCootiesProcess(){
-        ci.runCootiesProcess();
+    public void runCootiesProcess(Player p){
+        ci.runCootiesProcess(p);
     }
 }

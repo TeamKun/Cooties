@@ -1,8 +1,13 @@
 package net.kunmc.lab.cooties.cooties;
 
-class CootiesBase{
+public class CootiesState {
     String name;
     int time;
+
+    public CootiesState(String name, int time) {
+        this.name = name;
+        this.time = time;
+    }
 
     public String getName(){
         return name;
