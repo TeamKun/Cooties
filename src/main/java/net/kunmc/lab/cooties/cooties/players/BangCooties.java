@@ -1,4 +1,4 @@
 package net.kunmc.lab.cooties.cooties.players;
 
-public class KonoCooties {
+public class BangCooties {
 }
