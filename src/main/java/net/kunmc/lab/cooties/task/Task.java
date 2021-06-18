@@ -16,7 +16,7 @@ public class Task extends BukkitRunnable {
 
     @Override
     public void run() {
-        if (GameManager.runningMode == GameManager.GameMode.MODE_START)
+        if (GameManager.runningMode == GameManager.GameMode.MODE_NEUTRAL)
             return;
 
         // Update処理を実行

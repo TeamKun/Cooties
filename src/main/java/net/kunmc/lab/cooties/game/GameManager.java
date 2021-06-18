@@ -19,6 +19,7 @@ public class GameManager {
                 playerStateList = PlayerProcess.initPlayerState();
                 break;
             case MODE_NEUTRAL:
+                playerStateList = null;
                 break;
         }
     }

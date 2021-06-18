@@ -6,6 +6,12 @@ import org.bukkit.scheduler.BukkitTask;
 
 public final class Cooties extends JavaPlugin {
     private BukkitTask task;
+    private static Cooties plugin;
+
+    public static Cooties getPlugin() {
+        return plugin;
+    }
+
 
     @Override
     public void onEnable() {
