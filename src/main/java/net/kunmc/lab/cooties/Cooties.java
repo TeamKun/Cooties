@@ -1,5 +1,8 @@
 package net.kunmc.lab.cooties;
 
+import net.kunmc.lab.cooties.command.CommandConst;
+import net.kunmc.lab.cooties.command.CommandController;
+import net.kunmc.lab.cooties.event.PlayerEventHandler;
 import net.kunmc.lab.cooties.task.Task;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
@@ -16,7 +19,12 @@ public final class Cooties extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
-        task = new Task(this).runTaskTimer(this, 0, 1);
+        plugin = this;
+        getServer().getPluginManager().registerEvents(new PlayerEventHandler(), plugin);
+        task = new Task(plugin).runTaskTimer(this, 0, 1);
+        Config.loadConfig(false);
+
+        getCommand(CommandConst.MAIN_COMMAND).setExecutor(new CommandController());
     }
 
     @Override

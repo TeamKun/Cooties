@@ -13,7 +13,7 @@ public class PlayerCootiesFactory {
             //cooties.add(new CootiesContext(new BangCooties(name, 0)));
         }
         if (name.equals(Config.confusionCootiesPlayerName)){
-            cooties.add(new CootiesContext(new ConfusionCooties(name, 0)));
+            cooties.add(new CootiesContext(new ConfusionCooties("confusionCooties", 0)));
         }
         return cooties;
     }

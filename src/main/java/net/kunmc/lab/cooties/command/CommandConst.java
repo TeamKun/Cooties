@@ -12,6 +12,8 @@ public class CommandConst {
 
     // コンフィグ管理系
     public final static String COMMAND_CONFIG = "config";
+    public final static String COMMAND_CONFIG_RELOAD = "reload";
+    public final static String COMMAND_CONFIG_SET = "set";
 
     // コンフィグ設定対象
     public final static String COMMAND_CONFIG_COOTIES_TICK = "cootiesTick";

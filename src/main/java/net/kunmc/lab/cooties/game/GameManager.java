@@ -1,25 +1,25 @@
 package net.kunmc.lab.cooties.game;
 
-import net.kunmc.lab.cooties.cooties.CootiesContext;
 import net.kunmc.lab.cooties.player.PlayerProcess;
 import net.kunmc.lab.cooties.player.PlayerState;
 
-import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class GameManager {
     // 動作中のモード保持
     public static GameMode runningMode = GameMode.MODE_NEUTRAL;
-    public static List<PlayerState> playerStateList;
+    public static Map<UUID, PlayerState> playerStates;
     public static void controller(GameMode runningMode) {
         // モードを設定
         GameManager.runningMode = runningMode;
 
         switch (runningMode) {
             case MODE_START:
-                playerStateList = PlayerProcess.initPlayerState();
+                playerStates = PlayerProcess.initPlayerState();
                 break;
             case MODE_NEUTRAL:
-                playerStateList = null;
+                playerStates = null;
                 break;
         }
     }

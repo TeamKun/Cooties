@@ -6,3 +6,8 @@ prefix: Cooties
 authors: [ POne0301 ]
 description: 〇〇菌プラグイン
 website: https://github.com/TeamKun/Cooties
+commands:
+  coo:
+    description: Cooties Plugin
+    usage: /<command>
+    permission: op
