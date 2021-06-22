@@ -10,6 +10,7 @@ public class Config {
 
     // 各種菌を保持するPlayer
     public static String bangCootiesPlayerName;
+    public static String barrierCootiesPlayerName;
     public static String buriCootiesPlayerName;
     public static String confusionCootiesPlayerName;
     public static String gazeCootiesPlayerName;
@@ -30,6 +31,7 @@ public class Config {
 
         cootiesTick = config.getInt(CommandConst.COMMAND_CONFIG_COOTIES_TICK);
         bangCootiesPlayerName = config.getString(CommandConst.COMMAND_CONFIG_BANG_COOTIES_PLAYER);
+        barrierCootiesPlayerName = config.getString(CommandConst.COMMAND_CONFIG_BARRIER_COOTIES_PLAYER);
         buriCootiesPlayerName = config.getString(CommandConst.COMMAND_CONFIG_BURI_COOTIES_PLAYER);
         confusionCootiesPlayerName = config.getString(CommandConst.COMMAND_CONFIG_CONFUSION_COOTIES_PLAYER);
         gazeCootiesPlayerName = config.getString(CommandConst.COMMAND_CONFIG_GAZE_COOTIES_PLAYER);

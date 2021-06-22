@@ -4,12 +4,14 @@ import net.kunmc.lab.cooties.Config;
 import net.kunmc.lab.cooties.cooties.CootiesContext;
 import net.kunmc.lab.cooties.game.GameManager;
 import net.kunmc.lab.cooties.player.PlayerState;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.bukkit.Bukkit.getLogger;
 
@@ -26,8 +28,10 @@ public class Task extends BukkitRunnable {
             return;
 
         // Playerの更新処理を実行
-        for (PlayerState ps: GameManager.playerStates.values()){
-            Player p = ps.getPlayer();
+        for (Player p: Bukkit.getOnlinePlayers().stream().collect(Collectors.toList())){
+            PlayerState ps = GameManager.playerStates.get(p.getUniqueId());
+            if (ps == null)
+                continue;
             List<CootiesContext> shouldRemoveCooties = new ArrayList<>();
             for (CootiesContext cc: ps.getCooties()){
                 cc.runCootiesProcess(p);

@@ -16,14 +16,13 @@ public class CootiesContext {
         return ci.shouldRemoveCooties(p);
     }
 
-    public boolean initTimeProcess(Player p) {
-        return ci.shouldRemoveCooties(p);
+    public void initTimeProcess(Player p) {
+        ci.initTimeProcess(p);
     }
 
     public void stopCootiesProcess(Player p) {
         ci.stopCootiesProcess(p);
     }
-
 
     public String getName() {
         return ci.getName();

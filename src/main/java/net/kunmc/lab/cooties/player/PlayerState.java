@@ -42,7 +42,6 @@ public class PlayerState implements Cloneable{
         }
         this.cooties.add(cooties);
         cooties.setIsInit(true);
-        //cooties.initTimeProcess(player);
     }
 
 
