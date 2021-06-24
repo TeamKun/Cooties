@@ -1,6 +1,8 @@
 package net.kunmc.lab.cooties.event;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
+import net.kunmc.lab.cooties.Cooties;
+import net.kunmc.lab.cooties.cooties.players.BangCooties;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kunmc.lab.cooties.Config;
@@ -26,6 +28,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.bukkit.Bukkit.getLogger;
+import static org.bukkit.Bukkit.getUpdateFolderFile;
 
 public class PlayerEventHandler implements Listener {
 
@@ -35,6 +38,9 @@ public class PlayerEventHandler implements Listener {
             return;
 
         Player p = e.getPlayer();
+        if (p.getName().equals(Config.buriCootiesPlayerName))
+            return;
+
         boolean haveCooties = false;
         for (CootiesContext cc : GameManager.playerStates.get(p.getUniqueId()).getCooties()) {
             if (cc.getName().equals("buriCooties")) {
@@ -53,6 +59,8 @@ public class PlayerEventHandler implements Listener {
             return;
 
         Player p = e.getPlayer();
+        if (p.getName().equals(Config.nyaCootiesPlayerName))
+            return;
         boolean haveCooties = false;
         for (CootiesContext cc : GameManager.playerStates.get(p.getUniqueId()).getCooties()) {
             if (cc.getName().equals("nyaCooties")) {
@@ -77,18 +85,19 @@ public class PlayerEventHandler implements Listener {
 
        boolean haveCooties = false;
        Player p = e.getPlayer();
-       CootiesContext pc;
        for (CootiesContext cc : GameManager.playerStates.get(p.getUniqueId()).getCooties()) {
            if (cc.getName().equals("bangCooties")) {
+               if (!cc.getShouldRun()){
+                   return;
+               }
                haveCooties = true;
-               pc = cc;
+               cc.setShouldRun(false);
                break;
            }
        }
        if (!haveCooties)
            return;
 
-       // TODO: 常時音が鳴ると訳わからんので適当にクールタイムを設ける
        p.playSound(p.getLocation(), "minecraft:cooties.footstep",1, 1);
     }
 

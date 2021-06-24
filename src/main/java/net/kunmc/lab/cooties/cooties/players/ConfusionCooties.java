@@ -41,4 +41,5 @@ public class ConfusionCooties extends CootiesState implements CootiesInterface {
     public void stopCootiesProcess(Player p) {
         p.removePotionEffect(PotionEffectType.CONFUSION);
     }
+
 }

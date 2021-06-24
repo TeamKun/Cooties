@@ -18,11 +18,14 @@ public class PlayerCootiesFactory {
         //if (name.equals(Config.buriCootiesPlayerName)){
         //    cooties.add(new CootiesContext(new BuriCooties("buriCooties", 0)));
         //}
+        //if (name.equals(Config.confusionCootiesPlayerName)){
+        //    cooties.add(new CootiesContext(new ConfusionCooties("confusionCooties", 0)));
+        //}
         //if (name.equals(Config.gazeCootiesPlayerName)){
         //    cooties.add(new CootiesContext(new GazeCooties("gazeCooties", 0)));
         //}
-        //if (name.equals(Config.confusionCootiesPlayerName)){
-        //    cooties.add(new CootiesContext(new ConfusionCooties("confusionCooties", 0)));
+        //if (name.equals(Config.kickCootiesPlayerName)){
+        //    cooties.add(new CootiesContext(new KickCooties("kickCooties", 0)));
         //}
         //if (name.equals(Config.nyaCootiesPlayerName)){
         //    cooties.add(new CootiesContext(new NyaCooties("nyaCooties", 0)));

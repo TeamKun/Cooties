@@ -40,20 +40,32 @@ public class BarrierCooties extends CootiesState implements CootiesInterface {
         double pz = p.getLocation().getZ();
 
         for (Player otherPlayer: otherPlayers) {
-            getLogger().info(otherPlayer.getName());
             double opx = otherPlayer.getLocation().getX();
             double opy = otherPlayer.getLocation().getY();
             double opz = otherPlayer.getLocation().getZ();
             // 高さが上下5マスいないであれば判定
             double diffX = px - opx;
             double diffZ = pz - opz;
-            getLogger().info(Double.toString(px));
-            getLogger().info(Double.toString(opx));
+            double absX = Math.abs(diffX);
+            double absZ = Math.abs(diffZ);
 
-            if (Math.abs(py - opy) < 5.0 && (Math.abs(diffX) < 5.0 || Math.abs(diffZ) < 5.0)) {
+            if (Math.abs(py - opy) < 5.0 && (absX < 5.0 && absZ < 5.0)) {
+                int vectorX = 0;
+                int vectorZ = 0;
+                if (absX < 5.0 && diffX > 0){
+                    vectorX = -1;
+                } else if (absX < 5.0 && diffX <= 0) {
+                    vectorX = 1;
+                }
+                if (absZ < 5.0 && diffZ > 0){
+                    vectorZ = -1;
+                } else if (absZ < 5.0 && diffZ <= 0){
+                    vectorZ = 1;
+                }
+
                 vectorFlag.put(otherPlayer.getUniqueId(), true);
-                otherPlayer.setVelocity(new Vector(1, 0.5, 1));
-            } else if (vectorFlag.get(otherPlayer.getUniqueId())) {
+                otherPlayer.setVelocity(new Vector(vectorX, 0.5, vectorZ));
+            } else if (vectorFlag.get(otherPlayer.getUniqueId()) !=null && vectorFlag.get(otherPlayer.getUniqueId())) {
                 otherPlayer.setVelocity(new Vector(0, 0, 0));
                 vectorFlag.put(otherPlayer.getUniqueId(), false);
             }

@@ -39,4 +39,12 @@ public class CootiesContext {
     public void setIsInit(boolean isInit) {
         ci.setIsInit(isInit);
     }
+
+    public void setShouldRun(boolean flag) {
+        ci.setShouldRun(flag);
+    }
+
+    public boolean getShouldRun() {
+        return ci.getShouldRun();
+    }
 }

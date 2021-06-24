@@ -4,11 +4,14 @@ public class CootiesState {
     String name;
     int time;
     boolean isInit;
+    // 継承するクラスに入れるのは微妙だけどコード管理が楽になるので入れる
+    boolean shouldRun;
 
     public CootiesState(String name, int time) {
         this.name = name;
         this.time = time;
         isInit = true;
+        shouldRun = true;
     }
 
     public String getName(){
@@ -33,5 +36,13 @@ public class CootiesState {
 
     public boolean getIsInit() {
         return isInit;
+    }
+
+    public void setShouldRun(boolean flag) {
+        this.shouldRun = flag;
+    }
+
+    public boolean getShouldRun() {
+        return shouldRun;
     }
 }
