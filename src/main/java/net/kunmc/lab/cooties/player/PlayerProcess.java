@@ -10,8 +10,6 @@ import org.bukkit.entity.Player;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.bukkit.Bukkit.getLogger;
-
 public class PlayerProcess {
     /**
      * PlayerStateの初期化
@@ -55,7 +53,6 @@ public class PlayerProcess {
 
         // パターン1: 殴られた側が初期菌持ちなら渡す
         if (originCootiesPlayer.contains(touchedPlayer.getName())) {
-            getLogger().info("AAA");
             willTransmitTouchedPlayerCooties.putAll(PlayerCootiesFactory.createCooties(touchedPlayer.getName()));
         }
 

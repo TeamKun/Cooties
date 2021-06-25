@@ -24,7 +24,7 @@ public class BangCooties extends CootiesState implements CootiesInterface {
             setIsInit(false);
         }
 
-        if (!getShouldRun() && bangTime % 22 == 0) {
+        if (!getShouldRun() && bangTime % 10 == 0) {
             setShouldRun(true);
             bangTime = 1;
         }

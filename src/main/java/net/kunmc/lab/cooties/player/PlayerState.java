@@ -6,8 +6,6 @@ import org.bukkit.entity.Player;
 
 import java.util.Map;
 
-import static org.bukkit.Bukkit.getLogger;
-
 public class PlayerState implements Cloneable {
     Player player;
     Map<String, CootiesContext> cooties;
@@ -39,8 +37,6 @@ public class PlayerState implements Cloneable {
         if (!cooties.containsKey(cootiesType))
             return;
 
-        getLogger().info(cootiesType);
-        getLogger().info(cootiesType);
         cooties.remove(cootiesType);
     }
 

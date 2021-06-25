@@ -12,8 +12,6 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.bukkit.Bukkit.getLogger;
-
 public class GazeCooties extends CootiesState implements CootiesInterface {
 
     GazeCooties(String type, int time, String playerName) {
@@ -109,10 +107,6 @@ public class GazeCooties extends CootiesState implements CootiesInterface {
 
         pitch = pitch * 180.0 / Math.PI;
         yaw = yaw * 180.0 / Math.PI + 90;
-
-        getLogger().info("=======check======");
-        getLogger().info(Double.toString(yaw));
-        getLogger().info(Double.toString(pitch));
 
         // See: https://bukkit.org/threads/change-pitch-yaw-of-a-player-without-a-teleport.58582/
         // 向き変更後にパケットをサーバ側に送る必要がある（TPが一番簡単っぽい）
