@@ -14,6 +14,7 @@ public class Config {
     public static String buriCootiesPlayerName;
     public static String confusionCootiesPlayerName;
     public static String gazeCootiesPlayerName;
+    public static String gazeTargetPlayerName;
     public static String kickCootiesPlayerName;
     public static String nyaCootiesPlayerName;
 
@@ -35,6 +36,7 @@ public class Config {
         buriCootiesPlayerName = config.getString(CommandConst.COMMAND_CONFIG_BURI_COOTIES_PLAYER);
         confusionCootiesPlayerName = config.getString(CommandConst.COMMAND_CONFIG_CONFUSION_COOTIES_PLAYER);
         gazeCootiesPlayerName = config.getString(CommandConst.COMMAND_CONFIG_GAZE_COOTIES_PLAYER);
+        gazeTargetPlayerName = config.getString(CommandConst.COMMAND_CONFIG_GAZE_TARGET_PLAYER);
         kickCootiesPlayerName = config.getString(CommandConst.COMMAND_CONFIG_KICK_COOTIES_PLAYER);
         nyaCootiesPlayerName = config.getString(CommandConst.COMMAND_CONFIG_NYA_COOTIES_PLAYER);
     }

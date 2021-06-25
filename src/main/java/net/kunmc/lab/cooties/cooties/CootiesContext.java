@@ -24,8 +24,8 @@ public class CootiesContext {
         ci.stopCootiesProcess(p);
     }
 
-    public String getName() {
-        return ci.getName();
+    public String getType() {
+        return ci.getType();
     }
 
     public int getTime() {

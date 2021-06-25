@@ -1,42 +1,54 @@
 package net.kunmc.lab.cooties.cooties.players;
 
 import net.kunmc.lab.cooties.Config;
+import net.kunmc.lab.cooties.command.CommandConst;
 import net.kunmc.lab.cooties.cooties.CootiesInterface;
 import net.kunmc.lab.cooties.cooties.CootiesState;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.bukkit.Bukkit.getLogger;
 
 public class GazeCooties extends CootiesState implements CootiesInterface {
 
-    GazeCooties(String name, int time){
-        super(name, time);
+    GazeCooties(String type, int time, String playerName) {
+        super(type, time, playerName);
     }
 
     @Override
     public void runCootiesProcess(Player p) {
-        p.getLocation().getWorld().spawnParticle(Particle.DAMAGE_INDICATOR, p.getEyeLocation(), 1);
+        p.getLocation().getWorld().spawnParticle(Particle.HEART, p.getEyeLocation(),1, 1.0, 1.0, 1.0);
         String playerName = p.getName();
         if (playerName.equals(Config.gazeCootiesPlayerName))
             return;
 
-        Player targetPlayer = null;
-        // TODO: roadhog_kunを設定値に変更するか検討
-        if (playerName.equals("roadhog_kun")){
-            targetPlayer = Bukkit.getPlayer(Config.gazeCootiesPlayerName);
-        } else {
-            //targetPlayer = Bukkit.getPlayer("roadhog_kun");
-            targetPlayer = Bukkit.getPlayer(Config.gazeCootiesPlayerName);
+        if (getIsInit()) {
+            initTimeProcess(p);
+            setIsInit(false);
         }
 
-        // 対象がいないなら何もしない
-        if (targetPlayer == null)
+        Player targetPlayer = null;
+        List<String> existPlayerName = Bukkit.getOnlinePlayers().stream().map(HumanEntity::getName).collect(Collectors.toList());
+
+        // 見つめる対象がいない場合は終了
+        if (!existPlayerName.contains(Config.gazeTargetPlayerName))
             return;
-        // TODO: 見続けることについて要相談
-        if (getTime() % 5 == 0)
+        if (playerName.equals(Config.gazeTargetPlayerName)){
+            if (existPlayerName.contains(Config.gazeCootiesPlayerName))
+                targetPlayer = Bukkit.getPlayer(Config.gazeCootiesPlayerName);
+        } else {
+            targetPlayer = Bukkit.getPlayer(Config.gazeTargetPlayerName);
+        }
+
+        if (getTime() % 5 == 0 && targetPlayer != null)
             lookAtPlayer(p, targetPlayer);
 
         setTime(getTime()+1);
@@ -49,6 +61,10 @@ public class GazeCooties extends CootiesState implements CootiesInterface {
 
     @Override
     public void initTimeProcess (Player p) {
+        String cName = Config.gazeCootiesPlayerName;
+        String pName = cName.equals("") ? getPlayerName() : cName;
+        if (!p.getName().equals(cName))
+            p.sendMessage(String.format("%sは%s菌を移された", p.getName(), pName));
     }
 
     @Override

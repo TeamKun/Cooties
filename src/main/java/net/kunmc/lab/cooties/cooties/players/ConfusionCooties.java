@@ -10,13 +10,13 @@ import org.bukkit.potion.PotionEffectType;
 
 public class ConfusionCooties extends CootiesState implements CootiesInterface {
 
-    ConfusionCooties(String name, int time){
-        super(name, time);
+    ConfusionCooties(String type, int time, String playerName) {
+        super(type, time, playerName);
     }
 
     @Override
     public void runCootiesProcess(Player p) {
-        p.getLocation().getWorld().spawnParticle(Particle.DRAGON_BREATH, p.getEyeLocation(), 1);
+        p.getLocation().getWorld().spawnParticle(Particle.TOTEM, p.getEyeLocation(),1, 0.5, 1.0, 0.5);
         if (p.getName().equals(Config.confusionCootiesPlayerName))
             return;
 
@@ -34,7 +34,11 @@ public class ConfusionCooties extends CootiesState implements CootiesInterface {
 
     @Override
     public void initTimeProcess (Player p) {
-        p.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20 * 20, 0, false, false));
+        String cName = Config.confusionCootiesPlayerName;
+        String pName = cName.equals("") ? getPlayerName() : cName;
+        if (!p.getName().equals(cName))
+            p.sendMessage(String.format("%sは%s菌を移された", p.getName(), pName));
+        p.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, Config.cootiesTick, 0, false, false));
     }
 
     @Override

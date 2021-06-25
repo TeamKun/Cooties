@@ -9,15 +9,20 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class BuriCooties extends CootiesState implements CootiesInterface {
-    BuriCooties(String name, int time) {
-        super(name, time);
+    BuriCooties(String type, int time, String playerName) {
+        super(type, time, playerName);
     }
 
     @Override
     public void runCootiesProcess(Player p) {
-        p.getLocation().getWorld().spawnParticle(Particle.WATER_DROP, p.getEyeLocation(), 1);
+        p.getLocation().getWorld().spawnParticle(Particle.FALLING_WATER, p.getEyeLocation(),1, 1.0, 1.0, 1.0);
         if (p.getName().equals(Config.buriCootiesPlayerName))
             return;
+
+        if (getIsInit()) {
+            initTimeProcess(p);
+            setIsInit(false);
+        }
 
         setTime(getTime()+1);
     }
@@ -29,6 +34,10 @@ public class BuriCooties extends CootiesState implements CootiesInterface {
 
     @Override
     public void initTimeProcess(Player p) {
+        String cName = Config.buriCootiesPlayerName;
+        String pName = cName.equals("") ? getPlayerName() : cName;
+        if (!p.getName().equals(cName))
+            p.sendMessage(String.format("%sは%s菌を移された", p.getName(), pName));
     }
 
     @Override

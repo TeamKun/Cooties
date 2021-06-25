@@ -22,6 +22,8 @@ public class CommandConst {
     public final static String COMMAND_CONFIG_BURI_COOTIES_PLAYER = "buriPlayer";
     public final static String COMMAND_CONFIG_CONFUSION_COOTIES_PLAYER = "confusionPlayer";
     public final static String COMMAND_CONFIG_GAZE_COOTIES_PLAYER = "gazePlayer";
+    public final static String COMMAND_CONFIG_GAZE_TARGET_PLAYER = "gazeTargetPlayer";
     public final static String COMMAND_CONFIG_KICK_COOTIES_PLAYER = "kickPlayer";
     public final static String COMMAND_CONFIG_NYA_COOTIES_PLAYER = "nyaPlayer";
+    public final static String COMMAND_CONFIG_OFF = "off";
 }

@@ -12,7 +12,7 @@ public interface CootiesInterface {
     // 菌の処理を停止させる処理
     void stopCootiesProcess(Player p);
 
-    String getName();
+    String getType();
     int getTime();
     boolean getIsInit();
     void setIsInit(boolean isInit);

@@ -2,6 +2,7 @@ package net.kunmc.lab.cooties.event;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kunmc.lab.cooties.Cooties;
+import net.kunmc.lab.cooties.cooties.CootiesConst;
 import net.kunmc.lab.cooties.cooties.players.BangCooties;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -22,10 +23,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
-import java.util.UUID;
 
 import static org.bukkit.Bukkit.getLogger;
 import static org.bukkit.Bukkit.getUpdateFolderFile;
@@ -41,15 +40,9 @@ public class PlayerEventHandler implements Listener {
         if (p.getName().equals(Config.buriCootiesPlayerName))
             return;
 
-        boolean haveCooties = false;
-        for (CootiesContext cc : GameManager.playerStates.get(p.getUniqueId()).getCooties()) {
-            if (cc.getName().equals("buriCooties")) {
-                haveCooties = true;
-                break;
-            }
-        }
-        if (!haveCooties)
+        if (!GameManager.playerStates.get(p.getUniqueId()).getCooties().containsKey(CootiesConst.BURICOOTIES))
             return;
+
         e.message(Component.text(String.format("いや、%sだが", ((TextComponent)e.message()).content())));
     }
 
@@ -61,44 +54,39 @@ public class PlayerEventHandler implements Listener {
         Player p = e.getPlayer();
         if (p.getName().equals(Config.nyaCootiesPlayerName))
             return;
-        boolean haveCooties = false;
-        for (CootiesContext cc : GameManager.playerStates.get(p.getUniqueId()).getCooties()) {
-            if (cc.getName().equals("nyaCooties")) {
-                haveCooties = true;
-                break;
-            }
-        }
-        if (!haveCooties)
+
+        if (!GameManager.playerStates.get(p.getUniqueId()).getCooties().containsKey(CootiesConst.NYACOOTIES))
             return;
+
         e.message(Component.text(String.format("%sにゃ〜", ((TextComponent)e.message()).content())));
     }
 
 
     @EventHandler
     public void onMoved(PlayerMoveEvent e) {
-       if (GameManager.runningMode == GameManager.GameMode.MODE_NEUTRAL)
+        if (GameManager.runningMode == GameManager.GameMode.MODE_NEUTRAL)
             return;
 
-       double distanceMoved = e.getFrom().distance(e.getTo());
-       if (distanceMoved == 0.0)
-           return;
+        double distanceMoved = e.getFrom().distance(e.getTo());
+        if (distanceMoved == 0.0)
+            return;
 
-       boolean haveCooties = false;
-       Player p = e.getPlayer();
-       for (CootiesContext cc : GameManager.playerStates.get(p.getUniqueId()).getCooties()) {
-           if (cc.getName().equals("bangCooties")) {
-               if (!cc.getShouldRun()){
-                   return;
-               }
-               haveCooties = true;
-               cc.setShouldRun(false);
-               break;
-           }
-       }
-       if (!haveCooties)
-           return;
+        Player p = e.getPlayer();
 
-       p.playSound(p.getLocation(), "minecraft:cooties.footstep",1, 1);
+        Map<String, CootiesContext> pc = GameManager.playerStates.get(p.getUniqueId()).getCooties();
+
+        if (p.getName().equals(Config.bangCootiesPlayerName))
+            return;
+
+        if (!pc.containsKey(CootiesConst.BANGCOOTIES))
+            return;
+
+        if (!pc.get(CootiesConst.BANGCOOTIES).getShouldRun())
+            return;
+
+        pc.get(CootiesConst.BANGCOOTIES).setShouldRun(false);
+
+        p.playSound(p.getLocation(), "minecraft:cooties.footstep",1, 1);
     }
 
     @EventHandler

@@ -18,14 +18,14 @@ import static org.bukkit.Bukkit.getLogger;
 
 public class BarrierCooties extends CootiesState implements CootiesInterface {
     Map<UUID, Boolean> vectorFlag;
-    BarrierCooties(String name, int time){
-        super(name, time);
+    BarrierCooties(String type, int time, String playerName){
+        super(type, time, playerName);
         vectorFlag = new HashMap<UUID, Boolean>();
     }
 
     @Override
     public void runCootiesProcess(Player p) {
-        p.getLocation().getWorld().spawnParticle(Particle.DRIP_LAVA, p.getEyeLocation(), 1);
+        p.getLocation().getWorld().spawnParticle(Particle.NOTE, p.getEyeLocation(),1, 1.0, 1.0, 1.0);
         if (p.getName().equals(Config.barrierCootiesPlayerName))
             return;
 
@@ -75,11 +75,15 @@ public class BarrierCooties extends CootiesState implements CootiesInterface {
 
     @Override
     public boolean shouldRemoveCooties (Player p) {
-        return getTime() > Config.cootiesTick && !p.getName().equals(Config.bangCootiesPlayerName) ? true : false;
+        return getTime() > Config.cootiesTick && !p.getName().equals(Config.barrierCootiesPlayerName) ? true : false;
     }
 
     @Override
     public void initTimeProcess (Player p) {
+        String cName = Config.barrierCootiesPlayerName;
+        String pName = cName.equals("") ? getPlayerName() : cName;
+        if (!p.getName().equals(cName))
+            p.sendMessage(String.format("%sは%s菌を移された", p.getName(), pName));
     }
 
     @Override

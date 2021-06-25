@@ -17,16 +17,23 @@ import java.util.stream.Collectors;
 
 public class KickCooties extends CootiesState implements CootiesInterface {
     Map<UUID, Boolean> vectorFlag;
-    KickCooties(String name, int time){
-        super(name, time);
+
+
+    KickCooties(String type, int time, String playerName) {
+        super(type, time, playerName);
         vectorFlag = new HashMap<UUID, Boolean>();
     }
 
     @Override
     public void runCootiesProcess(Player p) {
-        p.getLocation().getWorld().spawnParticle(Particle.DRIPPING_HONEY, p.getEyeLocation(), 1);
+        p.getLocation().getWorld().spawnParticle(Particle.CRIT, p.getEyeLocation(),1, 1.0, 1.0, 1.0);
         if (p.getName().equals(Config.kickCootiesPlayerName))
             return;
+
+        if (getIsInit()) {
+            initTimeProcess(p);
+            setIsInit(false);
+        }
 
         List<Player> otherPlayers = Bukkit.getOnlinePlayers().stream()
                 .filter(e -> !(e.getName().equals(p.getName()) || e.getName().equals(Config.kickCootiesPlayerName))).collect(Collectors.toList());
@@ -45,7 +52,9 @@ public class KickCooties extends CootiesState implements CootiesInterface {
             double absZ = Math.abs(diffZ);
 
             if (Math.abs(py - opy) < 1.0 && absX < 1.0 && absZ < 1.0) {
-                otherPlayer.kick(Component.text("kicked"));
+                String cName = Config.kickCootiesPlayerName;
+                String pName = cName.equals("") ? getPlayerName() : cName;
+                otherPlayer.kick(Component.text(pName + "菌でkickされた"));
             }
         }
         setTime(getTime()+1);
@@ -53,11 +62,16 @@ public class KickCooties extends CootiesState implements CootiesInterface {
 
     @Override
     public boolean shouldRemoveCooties (Player p) {
-        return getTime() > Config.cootiesTick && !p.getName().equals(Config.bangCootiesPlayerName) ? true : false;
+        return getTime() > Config.cootiesTick && !p.getName().equals(Config.kickCootiesPlayerName) ? true : false;
     }
 
     @Override
     public void initTimeProcess (Player p) {
+        String cName = Config.kickCootiesPlayerName;
+        String pName = cName.equals("") ? getPlayerName() : cName;
+        if (!p.getName().equals(cName))
+            p.sendMessage(String.format("%sは%s菌を移された", p.getName(), pName));
+
     }
 
     @Override

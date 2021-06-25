@@ -2,6 +2,7 @@ package net.kunmc.lab.cooties.player;
 
 import net.kunmc.lab.cooties.Config;
 import net.kunmc.lab.cooties.Cooties;
+import net.kunmc.lab.cooties.cooties.CootiesConst;
 import net.kunmc.lab.cooties.cooties.CootiesContext;
 import net.kunmc.lab.cooties.cooties.players.PlayerCootiesFactory;
 import net.kunmc.lab.cooties.game.GameManager;
@@ -42,6 +43,7 @@ public class PlayerProcess {
         UUID touchPlayerId = touchPlayer.getUniqueId();
         List<String> originCootiesPlayer = new ArrayList<>(Arrays.asList(
                 Config.bangCootiesPlayerName,
+                Config.barrierCootiesPlayerName,
                 Config.buriCootiesPlayerName,
                 Config.confusionCootiesPlayerName,
                 Config.gazeCootiesPlayerName,
@@ -50,28 +52,50 @@ public class PlayerProcess {
 
         //　渡す菌を保持する変数
         //// 殴られた側が渡す菌
-        List<CootiesContext> willTransmitTouchedPlayerCooties = new ArrayList<>();
+        Map<String, CootiesContext> willTransmitTouchedPlayerCooties = new HashMap<>();
         //// 殴った側が渡す菌
-        List<CootiesContext> willTransmitTouchPlayerCooties = new ArrayList<>();
+        Map<String, CootiesContext> willTransmitTouchPlayerCooties = new HashMap<>();
 
         // パターン1: 殴られた側が初期菌持ちなら渡す
         if (originCootiesPlayer.contains(touchedPlayer.getName())){
-            willTransmitTouchedPlayerCooties.addAll(PlayerCootiesFactory.createCooties(touchedPlayer.getName()));
+            getLogger().info("AAA");
+            willTransmitTouchedPlayerCooties.putAll(PlayerCootiesFactory.createCooties(touchedPlayer.getName()));
         }
 
         // パターン1, 2, 3: 殴った側は菌を渡す
         PlayerState ps =  GameManager.playerStates.get(touchPlayerId).clone();
-        willTransmitTouchPlayerCooties.addAll(ps.getCooties());
+        willTransmitTouchPlayerCooties.putAll(ps.getCooties());
 
         // 菌を渡す側は綺麗にする
         GameManager.playerStates.get(touchPlayerId).clearCooties();
 
         // 菌渡し
-        for (CootiesContext cc: willTransmitTouchedPlayerCooties){
+        for (CootiesContext cc: willTransmitTouchedPlayerCooties.values()){
             GameManager.playerStates.get(touchPlayerId).addCooties(cc);
         }
-        for (CootiesContext cc: willTransmitTouchPlayerCooties){
+        for (CootiesContext cc: willTransmitTouchPlayerCooties.values()){
             GameManager.playerStates.get(touchedPlayerId).addCooties(cc);
+        }
+    }
+
+    public static void appendCootiesProcess(String playerName){
+        if (GameManager.runningMode == GameManager.GameMode.MODE_NEUTRAL)
+            return;
+        Player p = Bukkit.getPlayer(playerName);
+
+        for (CootiesContext cc: PlayerCootiesFactory.createCooties(playerName).values()) {
+            GameManager.playerStates.get(p.getUniqueId()).addCooties(cc);
+        }
+    }
+
+    public static void removeCootiesProcess(String playerName, String cootiesType){
+        if (GameManager.runningMode == GameManager.GameMode.MODE_NEUTRAL)
+            return;
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (player.getName().equals(playerName)){
+                GameManager.playerStates.get(Bukkit.getPlayer(playerName).getUniqueId())
+                        .removeCooties(cootiesType);
+            }
         }
     }
 }

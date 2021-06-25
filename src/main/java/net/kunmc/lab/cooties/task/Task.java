@@ -1,6 +1,5 @@
 package net.kunmc.lab.cooties.task;
 
-import net.kunmc.lab.cooties.Config;
 import net.kunmc.lab.cooties.cooties.CootiesContext;
 import net.kunmc.lab.cooties.game.GameManager;
 import net.kunmc.lab.cooties.player.PlayerState;
@@ -12,8 +11,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static org.bukkit.Bukkit.getLogger;
 
 public class Task extends BukkitRunnable {
     private JavaPlugin plugin;
@@ -33,16 +30,18 @@ public class Task extends BukkitRunnable {
             if (ps == null)
                 continue;
             List<CootiesContext> shouldRemoveCooties = new ArrayList<>();
-            for (CootiesContext cc: ps.getCooties()){
+            for (CootiesContext cc: ps.getCooties().values()){
+                // 菌処理
                 cc.runCootiesProcess(p);
 
+                // 菌削除
                 if (cc.shouldRemoveCooties(p)){
-                    //　CootiesContextのループ中にremoveするとExceptionが発生するため、後で削除
+                    //　CootiesContextのループ中にremoveするとExceptionが発生するため、後で削除する仕組み
                     shouldRemoveCooties.add(cc);
                 }
             }
             for (CootiesContext cc: shouldRemoveCooties){
-                ps.getCooties().remove(cc);
+                ps.removeCooties(cc.getType());
             }
         }
 

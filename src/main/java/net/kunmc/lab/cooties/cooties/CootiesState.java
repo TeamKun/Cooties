@@ -1,25 +1,30 @@
 package net.kunmc.lab.cooties.cooties;
 
 public class CootiesState {
-    String name;
+    // 菌種別
+    String type;
+    // 菌の保持時間
     int time;
+    // 菌元プレイヤー（特定条件下で使用）
+    String playerName;
     boolean isInit;
     // 継承するクラスに入れるのは微妙だけどコード管理が楽になるので入れる
     boolean shouldRun;
 
-    public CootiesState(String name, int time) {
-        this.name = name;
+    public CootiesState(String name, int time, String playerName) {
+        this.type = name;
         this.time = time;
+        this.playerName = playerName;
         isInit = true;
         shouldRun = true;
     }
 
-    public String getName(){
-        return name;
+    public String getType(){
+        return type;
     }
 
-    public void setName(String name){
-        this.name = name;
+    public void setType(String type){
+        this.type = type;
     }
 
     public int getTime(){
@@ -28,6 +33,10 @@ public class CootiesState {
 
     public void setTime(int time){
         this.time = time;
+    }
+
+    public String getPlayerName(){
+        return playerName;
     }
 
     public void setIsInit(boolean isInit) {

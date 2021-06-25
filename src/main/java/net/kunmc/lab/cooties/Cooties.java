@@ -18,17 +18,17 @@ public final class Cooties extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Plugin startup logic
         plugin = this;
         getServer().getPluginManager().registerEvents(new PlayerEventHandler(), plugin);
         task = new Task(plugin).runTaskTimer(this, 0, 1);
         Config.loadConfig(false);
 
         getCommand(CommandConst.MAIN_COMMAND).setExecutor(new CommandController());
+        getLogger().info("Cooties Plugin is enabled");
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        getLogger().info("Cooties Plugin is disabled");
     }
 }
