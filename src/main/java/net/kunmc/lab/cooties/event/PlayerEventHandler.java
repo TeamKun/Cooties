@@ -62,7 +62,7 @@ public class PlayerEventHandler implements Listener {
         double distanceMoved = e.getFrom().distance(e.getTo());
         // 仕様か知らないが、移動直後のみにわずかに動くことがあるので対応
         // 参考： スニーク時の distanceMoved が0.06程度
-        if (distanceMoved < 0.015)
+        if (distanceMoved < 0.04)
             return;
 
         Player p = e.getPlayer();

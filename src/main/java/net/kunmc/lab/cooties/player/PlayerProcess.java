@@ -82,9 +82,6 @@ public class PlayerProcess {
                 for (CootiesContext cc : PlayerCootiesFactory.createCooties(playerName).values())
                     GameManager.playerStates.get(player.getUniqueId()).addCooties(cc);
         }
-        for (CootiesContext cc : PlayerCootiesFactory.createCooties(playerName).values()) {
-            GameManager.playerStates.get(p.getUniqueId()).addCooties(cc);
-        }
     }
 
     public static void removeCootiesProcess(String playerName, String cootiesType) {
