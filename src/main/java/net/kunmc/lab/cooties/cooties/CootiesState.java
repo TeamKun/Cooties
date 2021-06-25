@@ -19,23 +19,23 @@ public class CootiesState {
         shouldRun = true;
     }
 
-    public String getType(){
+    public String getType() {
         return type;
     }
 
-    public void setType(String type){
+    public void setType(String type) {
         this.type = type;
     }
 
-    public int getTime(){
+    public int getTime() {
         return time;
     }
 
-    public void setTime(int time){
+    public void setTime(int time) {
         this.time = time;
     }
 
-    public String getPlayerName(){
+    public String getPlayerName() {
         return playerName;
     }
 

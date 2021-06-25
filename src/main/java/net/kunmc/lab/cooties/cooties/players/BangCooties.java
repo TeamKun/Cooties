@@ -6,17 +6,16 @@ import net.kunmc.lab.cooties.cooties.CootiesState;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
-import static org.bukkit.Bukkit.getLogger;
-
 public class BangCooties extends CootiesState implements CootiesInterface {
     int bangTime = 1;
-    BangCooties(String type, int time, String name){
+
+    BangCooties(String type, int time, String name) {
         super(type, time, name);
     }
 
     @Override
     public void runCootiesProcess(Player p) {
-        p.getLocation().getWorld().spawnParticle(Particle.COMPOSTER, p.getEyeLocation(),1, 1.0, 1.0, 1.0);
+        p.getLocation().getWorld().spawnParticle(Particle.COMPOSTER, p.getEyeLocation(), 1, 1.0, 1.0, 1.0);
         if (p.getName().equals(Config.bangCootiesPlayerName))
             return;
 
@@ -25,23 +24,23 @@ public class BangCooties extends CootiesState implements CootiesInterface {
             setIsInit(false);
         }
 
-        if (!getShouldRun() && bangTime % 22 == 0){
+        if (!getShouldRun() && bangTime % 22 == 0) {
             setShouldRun(true);
             bangTime = 1;
         }
 
         if (!getShouldRun())
             bangTime += 1;
-        setTime(getTime()+1);
+        setTime(getTime() + 1);
     }
 
     @Override
-    public boolean shouldRemoveCooties (Player p) {
+    public boolean shouldRemoveCooties(Player p) {
         return getTime() > Config.cootiesTick && !p.getName().equals(Config.bangCootiesPlayerName) ? true : false;
     }
 
     @Override
-    public void initTimeProcess (Player p) {
+    public void initTimeProcess(Player p) {
         String cName = Config.bangCootiesPlayerName;
         String pName = cName.equals("") ? getPlayerName() : cName;
         if (!p.getName().equals(cName))

@@ -7,7 +7,6 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +25,7 @@ public class KickCooties extends CootiesState implements CootiesInterface {
 
     @Override
     public void runCootiesProcess(Player p) {
-        p.getLocation().getWorld().spawnParticle(Particle.CRIT, p.getEyeLocation(),1, 1.0, 1.0, 1.0);
+        p.getLocation().getWorld().spawnParticle(Particle.CRIT, p.getEyeLocation(), 1, 1.0, 1.0, 1.0);
         if (p.getName().equals(Config.kickCootiesPlayerName))
             return;
 
@@ -41,11 +40,10 @@ public class KickCooties extends CootiesState implements CootiesInterface {
         double py = p.getLocation().getY();
         double pz = p.getLocation().getZ();
 
-        for (Player otherPlayer: otherPlayers) {
+        for (Player otherPlayer : otherPlayers) {
             double opx = otherPlayer.getLocation().getX();
             double opy = otherPlayer.getLocation().getY();
             double opz = otherPlayer.getLocation().getZ();
-            // 高さが上下5マスいないであれば判定
             double diffX = px - opx;
             double diffZ = pz - opz;
             double absX = Math.abs(diffX);
@@ -57,16 +55,16 @@ public class KickCooties extends CootiesState implements CootiesInterface {
                 otherPlayer.kick(Component.text(pName + "菌でkickされた"));
             }
         }
-        setTime(getTime()+1);
+        setTime(getTime() + 1);
     }
 
     @Override
-    public boolean shouldRemoveCooties (Player p) {
+    public boolean shouldRemoveCooties(Player p) {
         return getTime() > Config.cootiesTick && !p.getName().equals(Config.kickCootiesPlayerName) ? true : false;
     }
 
     @Override
-    public void initTimeProcess (Player p) {
+    public void initTimeProcess(Player p) {
         String cName = Config.kickCootiesPlayerName;
         String pName = cName.equals("") ? getPlayerName() : cName;
         if (!p.getName().equals(cName))

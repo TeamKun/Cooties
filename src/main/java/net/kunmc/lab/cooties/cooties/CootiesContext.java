@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 
 public class CootiesContext {
     CootiesInterface ci;
+
     public CootiesContext(CootiesInterface ci) {
         this.ci = ci;
     }

@@ -14,18 +14,17 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static org.bukkit.Bukkit.getLogger;
-
 public class BarrierCooties extends CootiesState implements CootiesInterface {
     Map<UUID, Boolean> vectorFlag;
-    BarrierCooties(String type, int time, String playerName){
+
+    BarrierCooties(String type, int time, String playerName) {
         super(type, time, playerName);
         vectorFlag = new HashMap<UUID, Boolean>();
     }
 
     @Override
     public void runCootiesProcess(Player p) {
-        p.getLocation().getWorld().spawnParticle(Particle.NOTE, p.getEyeLocation(),1, 1.0, 1.0, 1.0);
+        p.getLocation().getWorld().spawnParticle(Particle.NOTE, p.getEyeLocation(), 1, 1.0, 1.0, 1.0);
         if (p.getName().equals(Config.barrierCootiesPlayerName))
             return;
 
@@ -39,7 +38,7 @@ public class BarrierCooties extends CootiesState implements CootiesInterface {
         double py = p.getLocation().getY();
         double pz = p.getLocation().getZ();
 
-        for (Player otherPlayer: otherPlayers) {
+        for (Player otherPlayer : otherPlayers) {
             double opx = otherPlayer.getLocation().getX();
             double opy = otherPlayer.getLocation().getY();
             double opz = otherPlayer.getLocation().getZ();
@@ -52,34 +51,34 @@ public class BarrierCooties extends CootiesState implements CootiesInterface {
             if (Math.abs(py - opy) < 5.0 && (absX < 5.0 && absZ < 5.0)) {
                 int vectorX = 0;
                 int vectorZ = 0;
-                if (absX < 5.0 && diffX > 0){
+                if (absX < 5.0 && diffX > 0) {
                     vectorX = -1;
                 } else if (absX < 5.0 && diffX <= 0) {
                     vectorX = 1;
                 }
-                if (absZ < 5.0 && diffZ > 0){
+                if (absZ < 5.0 && diffZ > 0) {
                     vectorZ = -1;
-                } else if (absZ < 5.0 && diffZ <= 0){
+                } else if (absZ < 5.0 && diffZ <= 0) {
                     vectorZ = 1;
                 }
 
                 vectorFlag.put(otherPlayer.getUniqueId(), true);
                 otherPlayer.setVelocity(new Vector(vectorX, 0.5, vectorZ));
-            } else if (vectorFlag.get(otherPlayer.getUniqueId()) !=null && vectorFlag.get(otherPlayer.getUniqueId())) {
+            } else if (vectorFlag.get(otherPlayer.getUniqueId()) != null && vectorFlag.get(otherPlayer.getUniqueId())) {
                 otherPlayer.setVelocity(new Vector(0, 0, 0));
                 vectorFlag.put(otherPlayer.getUniqueId(), false);
             }
         }
-        setTime(getTime()+1);
+        setTime(getTime() + 1);
     }
 
     @Override
-    public boolean shouldRemoveCooties (Player p) {
+    public boolean shouldRemoveCooties(Player p) {
         return getTime() > Config.cootiesTick && !p.getName().equals(Config.barrierCootiesPlayerName) ? true : false;
     }
 
     @Override
-    public void initTimeProcess (Player p) {
+    public void initTimeProcess(Player p) {
         String cName = Config.barrierCootiesPlayerName;
         String pName = cName.equals("") ? getPlayerName() : cName;
         if (!p.getName().equals(cName))

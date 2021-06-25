@@ -5,8 +5,6 @@ import net.kunmc.lab.cooties.cooties.CootiesInterface;
 import net.kunmc.lab.cooties.cooties.CootiesState;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 public class BuriCooties extends CootiesState implements CootiesInterface {
     BuriCooties(String type, int time, String playerName) {
@@ -15,7 +13,7 @@ public class BuriCooties extends CootiesState implements CootiesInterface {
 
     @Override
     public void runCootiesProcess(Player p) {
-        p.getLocation().getWorld().spawnParticle(Particle.FALLING_WATER, p.getEyeLocation(),1, 1.0, 1.0, 1.0);
+        p.getLocation().getWorld().spawnParticle(Particle.FALLING_WATER, p.getEyeLocation(), 1, 1.0, 1.0, 1.0);
         if (p.getName().equals(Config.buriCootiesPlayerName))
             return;
 
@@ -24,7 +22,7 @@ public class BuriCooties extends CootiesState implements CootiesInterface {
             setIsInit(false);
         }
 
-        setTime(getTime()+1);
+        setTime(getTime() + 1);
     }
 
     @Override

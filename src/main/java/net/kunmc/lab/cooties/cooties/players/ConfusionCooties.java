@@ -16,7 +16,7 @@ public class ConfusionCooties extends CootiesState implements CootiesInterface {
 
     @Override
     public void runCootiesProcess(Player p) {
-        p.getLocation().getWorld().spawnParticle(Particle.TOTEM, p.getEyeLocation(),1, 0.5, 1.0, 0.5);
+        p.getLocation().getWorld().spawnParticle(Particle.TOTEM, p.getEyeLocation(), 1, 0.5, 1.0, 0.5);
         if (p.getName().equals(Config.confusionCootiesPlayerName))
             return;
 
@@ -24,16 +24,16 @@ public class ConfusionCooties extends CootiesState implements CootiesInterface {
             initTimeProcess(p);
             setIsInit(false);
         }
-        setTime(getTime()+1);
+        setTime(getTime() + 1);
     }
 
     @Override
-    public boolean shouldRemoveCooties (Player p) {
+    public boolean shouldRemoveCooties(Player p) {
         return getTime() > Config.cootiesTick && !p.getName().equals(Config.confusionCootiesPlayerName) ? true : false;
     }
 
     @Override
-    public void initTimeProcess (Player p) {
+    public void initTimeProcess(Player p) {
         String cName = Config.confusionCootiesPlayerName;
         String pName = cName.equals("") ? getPlayerName() : cName;
         if (!p.getName().equals(cName))

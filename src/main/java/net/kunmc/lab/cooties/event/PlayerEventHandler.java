@@ -1,33 +1,25 @@
 package net.kunmc.lab.cooties.event;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
-import net.kunmc.lab.cooties.Cooties;
-import net.kunmc.lab.cooties.cooties.CootiesConst;
-import net.kunmc.lab.cooties.cooties.players.BangCooties;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kunmc.lab.cooties.Config;
-import net.kunmc.lab.cooties.command.CommandConst;
+import net.kunmc.lab.cooties.cooties.CootiesConst;
 import net.kunmc.lab.cooties.cooties.CootiesContext;
 import net.kunmc.lab.cooties.cooties.players.PlayerCootiesFactory;
 import net.kunmc.lab.cooties.game.GameManager;
 import net.kunmc.lab.cooties.player.PlayerProcess;
 import net.kunmc.lab.cooties.player.PlayerState;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import java.awt.*;
-import java.util.*;
-import java.util.List;
-
-import static org.bukkit.Bukkit.getLogger;
-import static org.bukkit.Bukkit.getUpdateFolderFile;
+import java.util.Map;
+import java.util.UUID;
 
 public class PlayerEventHandler implements Listener {
 
@@ -43,7 +35,7 @@ public class PlayerEventHandler implements Listener {
         if (!GameManager.playerStates.get(p.getUniqueId()).getCooties().containsKey(CootiesConst.BURICOOTIES))
             return;
 
-        e.message(Component.text(String.format("いや、%sだが", ((TextComponent)e.message()).content())));
+        e.message(Component.text(String.format("いや、%sだが", ((TextComponent) e.message()).content())));
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -58,7 +50,7 @@ public class PlayerEventHandler implements Listener {
         if (!GameManager.playerStates.get(p.getUniqueId()).getCooties().containsKey(CootiesConst.NYACOOTIES))
             return;
 
-        e.message(Component.text(String.format("%sにゃ〜", ((TextComponent)e.message()).content())));
+        e.message(Component.text(String.format("%sにゃ〜", ((TextComponent) e.message()).content())));
     }
 
 
@@ -68,7 +60,9 @@ public class PlayerEventHandler implements Listener {
             return;
 
         double distanceMoved = e.getFrom().distance(e.getTo());
-        if (distanceMoved == 0.0)
+        // 仕様か知らないが、移動直後のみにわずかに動くことがあるので対応
+        // 参考： スニーク時の distanceMoved が0.06程度
+        if (distanceMoved < 0.015)
             return;
 
         Player p = e.getPlayer();
@@ -86,11 +80,11 @@ public class PlayerEventHandler implements Listener {
 
         pc.get(CootiesConst.BANGCOOTIES).setShouldRun(false);
 
-        p.playSound(p.getLocation(), "minecraft:cooties.footstep",1, 1);
+        p.playSound(p.getLocation(), "minecraft:cooties.footstep", 1, 1);
     }
 
     @EventHandler
-    public void onDamaged(EntityDamageByEntityEvent e){
+    public void onDamaged(EntityDamageByEntityEvent e) {
         if (GameManager.runningMode == GameManager.GameMode.MODE_NEUTRAL)
             return;
 
@@ -98,11 +92,11 @@ public class PlayerEventHandler implements Listener {
             Player touchedPlayer = (Player) e.getEntity();
             Player touchPlayer = (Player) e.getDamager();
             PlayerProcess.transmitCooties(touchedPlayer, touchPlayer);
-       }
+        }
     }
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent e){
+    public void onJoin(PlayerJoinEvent e) {
         if (GameManager.runningMode == GameManager.GameMode.MODE_NEUTRAL) {
             return;
         }

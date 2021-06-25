@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class Task extends BukkitRunnable {
     private JavaPlugin plugin;
 
-    public Task(JavaPlugin plugin){
+    public Task(JavaPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -25,28 +25,24 @@ public class Task extends BukkitRunnable {
             return;
 
         // Playerの更新処理を実行
-        for (Player p: Bukkit.getOnlinePlayers().stream().collect(Collectors.toList())){
+        for (Player p : Bukkit.getOnlinePlayers().stream().collect(Collectors.toList())) {
             PlayerState ps = GameManager.playerStates.get(p.getUniqueId());
             if (ps == null)
                 continue;
             List<CootiesContext> shouldRemoveCooties = new ArrayList<>();
-            for (CootiesContext cc: ps.getCooties().values()){
+            for (CootiesContext cc : ps.getCooties().values()) {
                 // 菌処理
                 cc.runCootiesProcess(p);
 
                 // 菌削除
-                if (cc.shouldRemoveCooties(p)){
+                if (cc.shouldRemoveCooties(p)) {
                     //　CootiesContextのループ中にremoveするとExceptionが発生するため、後で削除する仕組み
                     shouldRemoveCooties.add(cc);
                 }
             }
-            for (CootiesContext cc: shouldRemoveCooties){
+            for (CootiesContext cc : shouldRemoveCooties) {
                 ps.removeCooties(cc.getType());
             }
         }
-
-        //for (PlayerState ps: GameManager.playerStateList) {
-        //    getLogger().info(ps.getPlayer().getName());
-        //}
     }
 }
