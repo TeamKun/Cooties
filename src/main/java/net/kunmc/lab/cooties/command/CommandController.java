@@ -50,6 +50,8 @@ public class CommandController implements CommandExecutor, TabCompleter {
             cootiesPlayerConfigList.add(CommandConst.COMMAND_CONFIG_COOTIES_TICK);
             completions.addAll(cootiesPlayerConfigList.stream()
                     .filter(e -> e.startsWith(args[2])).collect(Collectors.toList()));
+        } else if (args.length == 4 && args[2].equals(CommandConst.COMMAND_CONFIG_COOTIES_TICK)){
+            completions.add("<数字>");
         } else if (args.length == 4 && cootiesPlayerConfigList.contains(args[2])) {
             List<String> name = Bukkit.getOnlinePlayers().stream().map(HumanEntity::getName).collect(Collectors.toList());
             name.add(CommandConst.COMMAND_CONFIG_OFF);
@@ -62,6 +64,7 @@ public class CommandController implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
             sender.sendMessage(DecolationConst.RED + "引数がありません");
+            sendConfigUsage(sender);
             return true;
         }
         if (!(sender instanceof Player)) {
@@ -73,10 +76,20 @@ public class CommandController implements CommandExecutor, TabCompleter {
         String[] commandArgs = Arrays.copyOfRange(args, 1, args.length);
         switch (commandName) {
             case CommandConst.COMMAND_START:
+                if (GameManager.runningMode == GameManager.GameMode.MODE_START){
+                    sender.sendMessage(DecolationConst.RED + "すでに開始しています");
+                    return true;
+                }
                 GameManager.controller(GameManager.GameMode.MODE_START);
+                sender.sendMessage(DecolationConst.GREEN + "〇〇菌を開始します");
                 break;
             case CommandConst.COMMAND_STOP:
+                if (GameManager.runningMode == GameManager.GameMode.MODE_NEUTRAL){
+                    sender.sendMessage(DecolationConst.RED + "開始されていません");
+                    return true;
+                }
                 GameManager.controller(GameManager.GameMode.MODE_NEUTRAL);
+                sender.sendMessage(DecolationConst.GREEN + "〇〇菌を終了します");
                 break;
             case CommandConst.COMMAND_CONFIG:
                 runConfig(sender, commandArgs);
@@ -127,7 +140,19 @@ public class CommandController implements CommandExecutor, TabCompleter {
             }
             switch (args[1]) {
                 case CommandConst.COMMAND_CONFIG_COOTIES_TICK:
-                    Config.cootiesTick = Integer.parseInt(args[2]);
+                    int num;
+                    try{
+                        num = Integer.parseInt(args[2]);
+                    } catch (NumberFormatException e){
+                        sender.sendMessage(DecolationConst.RED + "整数以外が入力されています");
+                        return;
+                    }
+                    if (num < 1) {
+                        sender.sendMessage(DecolationConst.RED + "0より大きい整数を入力してください");
+                        return;
+                    }
+
+                    Config.cootiesTick = num;
                     break;
                 case CommandConst.COMMAND_CONFIG_BANG_COOTIES_PLAYER:
                     PlayerProcess.removeCootiesProcess(Config.bangCootiesPlayerName, CootiesConst.BANGCOOTIES);
@@ -207,7 +232,8 @@ public class CommandController implements CommandExecutor, TabCompleter {
             }
             sender.sendMessage(String.format("%s%sの値を%sに更新しました", DecolationConst.GREEN, args[1], args[2]));
         } else {
-            sender.sendMessage(DecolationConst.RED + "存在しないコマンド、または引数です");
+            sender.sendMessage(DecolationConst.RED + "存在しないコマンド・引数、または引数が不足しています");
+            sendConfigUsage(sender);
             return;
         }
     }
