@@ -50,7 +50,7 @@ public class PlayerEventHandler implements Listener {
         if (!GameManager.playerStates.get(p.getUniqueId()).getCooties().containsKey(CootiesConst.NYACOOTIES))
             return;
 
-        e.message(Component.text(String.format("%sにゃ〜", ((TextComponent) e.message()).content())));
+        e.message(Component.text(String.format("%sにゃ", ((TextComponent) e.message()).content())));
     }
 
 
