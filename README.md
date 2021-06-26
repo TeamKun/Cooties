@@ -38,9 +38,4 @@
 | gazePlayer       | gazeTargetPlayer で設定されたプレイヤーを見続ける菌の保持プレイヤー | YOSHIKO\__CHAN__ |
 | gazeTargetPlayer | gazePlayer の菌を保持するプレイヤーが見る対象となるプレイヤー | roadhog_kun      |
 | kickPlayer       | 近づいたプレイヤーをkickする菌の保持プレイヤー               | rnojaja          |
-| nyaPlayer        | チャットを打つと「〇〇だにゃ〜」と変換させる菌の保持プレイヤー | Yanyaa           |
-
-# リソースパック
-
-
-
+| nyaPlayer        | チャットを打つと語尾に「にゃ」をつける菌の保持プレイヤー | Yanyaa           |
