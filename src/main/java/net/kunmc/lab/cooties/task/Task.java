@@ -41,6 +41,7 @@ public class Task extends BukkitRunnable {
                 }
             }
             for (CootiesContext cc : shouldRemoveCooties) {
+                cc.stopCootiesProcess(p);
                 ps.removeCooties(cc.getType());
             }
         }

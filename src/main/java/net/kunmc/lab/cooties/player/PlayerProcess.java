@@ -60,8 +60,8 @@ public class PlayerProcess {
         PlayerState ps = GameManager.playerStates.get(touchPlayerId).clone();
         willTransmitTouchPlayerCooties.putAll(ps.getCooties());
 
-        // 菌を渡す側は綺麗にする
-        GameManager.playerStates.get(touchPlayerId).clearCooties();
+        // 菌を渡す側は綺麗にする、ただし触った相手が菌持ちの場合はその菌は保持したままになる
+        GameManager.playerStates.get(touchPlayerId).clearCootiesWhenTouch(touchedPlayer, originCootiesPlayer);
 
         // 菌渡し
         for (CootiesContext cc : willTransmitTouchedPlayerCooties.values()) {

@@ -254,8 +254,8 @@ public class CommandController implements CommandExecutor, TabCompleter {
         sender.sendMessage(String.format("%s%s"
                 , usagePrefix, CommandConst.COMMAND_CONFIG_RELOAD));
         sender.sendMessage(String.format("%sデフォルトのコンフィグをリロード", descPrefix));
-        sender.sendMessage(String.format("%s%s <コンフィグ名> <値>"
-                , usagePrefix, CommandConst.COMMAND_CONFIG_SET));
+        sender.sendMessage(String.format("%s%s %s <コンフィグ名> <値>"
+                , usagePrefix, CommandConst.COMMAND_CONFIG, CommandConst.COMMAND_CONFIG_SET));
         sender.sendMessage(String.format("%sコンフィグを設定(設定項目は /coo config で確認)", descPrefix));
     }
 }

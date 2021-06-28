@@ -11,8 +11,8 @@ public class CootiesState {
     // 継承するクラスに入れるのは微妙だけどコード管理が楽になるので入れる
     boolean shouldRun;
 
-    public CootiesState(String name, int time, String playerName) {
-        this.type = name;
+    public CootiesState(String type, int time, String playerName) {
+        this.type = type;
         this.time = time;
         this.playerName = playerName;
         isInit = true;

@@ -4,6 +4,8 @@ import net.kunmc.lab.cooties.cooties.CootiesContext;
 import net.kunmc.lab.cooties.cooties.players.PlayerCootiesFactory;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class PlayerState implements Cloneable {
@@ -19,15 +21,27 @@ public class PlayerState implements Cloneable {
         return cooties;
     }
 
-    public void clearCooties() {
+    public void clearCootiesWhenTouch(Player touchedPlayer, List originCootiesPlayer) {
         /**
-         * 菌のリセット、ただし常時菌を持つPlayerは削除後に追加される
+         * 相手を触った時に自身の菌を綺麗にする。
+         *   - 触った相手が常時菌を持つPlayerの場合は対応する菌を削除しない(菌をもっている時に菌保持者から菌をうつされることはない)
+         *   - 常時菌を持つPlayerは削除後に追加される
          */
+        List<CootiesContext> willRemove = new ArrayList<>();
         for (CootiesContext cc : cooties.values()) {
-            cc.stopCootiesProcess(player);
+            if (!originCootiesPlayer.contains(touchedPlayer.getName())) {
+                cc.stopCootiesProcess(player);
+                willRemove.add(cc);
+            }
         }
-        cooties.clear();
-        cooties = PlayerCootiesFactory.createCooties(player.getName());
+        for (CootiesContext cc : willRemove) {
+            removeCooties(cc.getType());
+        }
+
+        // 殴った側が菌持ちだった場合は追加
+        if (originCootiesPlayer.contains(player.getName())) {
+            cooties = PlayerCootiesFactory.createCooties(player.getName());
+        }
     }
 
     public void removeCooties(String cootiesType) {
