@@ -15,6 +15,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -24,7 +25,7 @@ import java.util.UUID;
 public class PlayerEventHandler implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onChattedAddBuri(AsyncChatEvent e) {
+    public void onChattedAddBuri(AsyncPlayerChatEvent e) {
         if (GameManager.runningMode == GameManager.GameMode.MODE_NEUTRAL)
             return;
 
@@ -35,11 +36,11 @@ public class PlayerEventHandler implements Listener {
         if (!GameManager.playerStates.get(p.getUniqueId()).getCooties().containsKey(CootiesConst.BURICOOTIES))
             return;
 
-        e.message(Component.text(String.format("いや、%sだが", ((TextComponent) e.message()).content())));
+        e.setMessage(String.format("いや%sだが", e.getMessage()));
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void onChattedAddNya(AsyncChatEvent e) {
+    public void onChattedAddNya(AsyncPlayerChatEvent e) {
         if (GameManager.runningMode == GameManager.GameMode.MODE_NEUTRAL)
             return;
 
@@ -50,9 +51,8 @@ public class PlayerEventHandler implements Listener {
         if (!GameManager.playerStates.get(p.getUniqueId()).getCooties().containsKey(CootiesConst.NYACOOTIES))
             return;
 
-        e.message(Component.text(String.format("%sにゃ", ((TextComponent) e.message()).content())));
+        e.setMessage(String.format("%sにゃ", e.getMessage()));
     }
-
 
     @EventHandler
     public void onMoved(PlayerMoveEvent e) {
