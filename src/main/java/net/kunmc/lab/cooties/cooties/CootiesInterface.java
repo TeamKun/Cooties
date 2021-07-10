@@ -26,4 +26,5 @@ public interface CootiesInterface {
     boolean getShouldRun();
 
     void setShouldRun(boolean flag);
+    String getEffectMessage();
 }

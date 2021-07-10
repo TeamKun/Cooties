@@ -48,4 +48,8 @@ public class CootiesContext {
     public boolean getShouldRun() {
         return ci.getShouldRun();
     }
+
+    public String getEffectMessage() {
+        return ci.getEffectMessage();
+    }
 }

@@ -4,6 +4,8 @@ import net.kunmc.lab.cooties.Config;
 import net.kunmc.lab.cooties.cooties.CootiesContext;
 import net.kunmc.lab.cooties.cooties.players.PlayerCootiesFactory;
 import net.kunmc.lab.cooties.game.GameManager;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -64,12 +66,20 @@ public class PlayerProcess {
         GameManager.playerStates.get(touchPlayerId).clearCootiesWhenTouch(touchedPlayer, originCootiesPlayer);
 
         // 菌渡し
-        for (CootiesContext cc : willTransmitTouchedPlayerCooties.values()) {
-            GameManager.playerStates.get(touchPlayerId).addCooties(cc);
+        transCootiesProcess(willTransmitTouchedPlayerCooties, touchPlayer);
+        transCootiesProcess(willTransmitTouchPlayerCooties, touchedPlayer);
+    }
+
+    private static void transCootiesProcess(Map<String, CootiesContext> Cooties, Player p){
+        List<String> actionbarMessage = new ArrayList<>();
+        for (CootiesContext cc : Cooties.values()) {
+            boolean addCheck = GameManager.playerStates.get(p.getUniqueId()).addCooties(cc);
+            if (addCheck) {
+                actionbarMessage.add(cc.getEffectMessage());
+            }
         }
-        for (CootiesContext cc : willTransmitTouchPlayerCooties.values()) {
-            GameManager.playerStates.get(touchedPlayerId).addCooties(cc);
-        }
+        if (actionbarMessage.size() > 0)
+            PlayerProcess.createActionbar(p, String.join("し、", actionbarMessage));
     }
 
     public static void appendCootiesProcess(String playerName) {
@@ -93,5 +103,11 @@ public class PlayerProcess {
                         .removeCooties(cootiesType);
             }
         }
+    }
+
+    private static void createActionbar(Player p, String message){
+        TextComponent component = new TextComponent();
+        component.setText(message);
+        p.spigot().sendMessage(ChatMessageType.ACTION_BAR,component);
     }
 }

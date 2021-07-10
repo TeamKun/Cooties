@@ -3,6 +3,7 @@ package net.kunmc.lab.cooties.cooties.players;
 import net.kunmc.lab.cooties.Config;
 import net.kunmc.lab.cooties.cooties.CootiesInterface;
 import net.kunmc.lab.cooties.cooties.CootiesState;
+import net.kunmc.lab.cooties.player.PlayerProcess;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
@@ -21,6 +22,7 @@ public class KickCooties extends CootiesState implements CootiesInterface {
     KickCooties(String type, int time, String playerName) {
         super(type, time, playerName);
         vectorFlag = new HashMap<UUID, Boolean>();
+        setEffectMessage("近づくとkickする");
     }
 
     @Override
@@ -67,8 +69,9 @@ public class KickCooties extends CootiesState implements CootiesInterface {
     public void initTimeProcess(Player p) {
         String cName = Config.kickCootiesPlayerName;
         String pName = cName.equals("") ? getPlayerName() : cName;
-        if (!p.getName().equals(cName))
+        if (!p.getName().equals(cName)) {
             p.sendMessage(String.format("%sは%s菌を移された", p.getName(), pName));
+        }
 
     }
 

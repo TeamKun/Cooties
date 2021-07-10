@@ -54,15 +54,21 @@ public class PlayerState implements Cloneable {
         cooties.remove(cootiesType);
     }
 
-    public void addCooties(CootiesContext cooties) {
+    /**
+     * 追加した場合はtrueを返す
+     * @param cooties
+     * @return
+     */
+    public boolean addCooties(CootiesContext cooties) {
         /**
          * 菌の追加、別Playerからの受け渡し時に使用されることを想定
          *   受け渡しがされる場合は初期に実行される処理を行う
          */
         if (this.cooties.containsKey(cooties.getType()))
-            return;
+            return false;
         this.cooties.put(cooties.getType(), cooties);
         cooties.setIsInit(true);
+        return true;
     }
 
 

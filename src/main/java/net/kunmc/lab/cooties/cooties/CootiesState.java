@@ -7,9 +7,13 @@ public class CootiesState {
     int time;
     // 菌元プレイヤー（特定条件下で使用）
     String playerName;
+    // 菌の初期処理をするかどうかのフラグ
     boolean isInit;
+    // 特定の処理を実行するかのフラグ
     // 継承するクラスに入れるのは微妙だけどコード管理が楽になるので入れる
     boolean shouldRun;
+    // アクションバー用のメッセージ
+    String effectMessage;
 
     public CootiesState(String type, int time, String playerName) {
         this.type = type;
@@ -53,5 +57,13 @@ public class CootiesState {
 
     public boolean getShouldRun() {
         return shouldRun;
+    }
+
+    public void setEffectMessage(String message) {
+        effectMessage = message;
+    }
+
+    public String getEffectMessage() {
+        return effectMessage;
     }
 }

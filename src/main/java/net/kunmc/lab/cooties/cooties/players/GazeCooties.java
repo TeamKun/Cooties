@@ -3,6 +3,7 @@ package net.kunmc.lab.cooties.cooties.players;
 import net.kunmc.lab.cooties.Config;
 import net.kunmc.lab.cooties.cooties.CootiesInterface;
 import net.kunmc.lab.cooties.cooties.CootiesState;
+import net.kunmc.lab.cooties.player.PlayerProcess;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -16,6 +17,7 @@ public class GazeCooties extends CootiesState implements CootiesInterface {
 
     GazeCooties(String type, int time, String playerName) {
         super(type, time, playerName);
+        setEffectMessage("見つめ続ける");
     }
 
     @Override
@@ -34,8 +36,10 @@ public class GazeCooties extends CootiesState implements CootiesInterface {
         List<String> existPlayerName = Bukkit.getOnlinePlayers().stream().map(HumanEntity::getName).collect(Collectors.toList());
 
         // 見つめる対象がいない場合は終了
-        if (!existPlayerName.contains(Config.gazeTargetPlayerName))
+        if (!existPlayerName.contains(Config.gazeTargetPlayerName)) {
+            setTime(getTime() + 1);
             return;
+        }
         if (playerName.equals(Config.gazeTargetPlayerName)) {
             if (existPlayerName.contains(Config.gazeCootiesPlayerName))
                 targetPlayer = Bukkit.getPlayer(Config.gazeCootiesPlayerName);
@@ -58,8 +62,9 @@ public class GazeCooties extends CootiesState implements CootiesInterface {
     public void initTimeProcess(Player p) {
         String cName = Config.gazeCootiesPlayerName;
         String pName = cName.equals("") ? getPlayerName() : cName;
-        if (!p.getName().equals(cName))
+        if (!p.getName().equals(cName)) {
             p.sendMessage(String.format("%sは%s菌を移された", p.getName(), pName));
+        }
     }
 
     @Override

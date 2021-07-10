@@ -3,6 +3,7 @@ package net.kunmc.lab.cooties.cooties.players;
 import net.kunmc.lab.cooties.Config;
 import net.kunmc.lab.cooties.cooties.CootiesInterface;
 import net.kunmc.lab.cooties.cooties.CootiesState;
+import net.kunmc.lab.cooties.player.PlayerProcess;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
@@ -11,6 +12,7 @@ public class BangCooties extends CootiesState implements CootiesInterface {
 
     BangCooties(String type, int time, String name) {
         super(type, time, name);
+        setEffectMessage("動くと台パン音");
     }
 
     @Override
@@ -43,8 +45,9 @@ public class BangCooties extends CootiesState implements CootiesInterface {
     public void initTimeProcess(Player p) {
         String cName = Config.bangCootiesPlayerName;
         String pName = cName.equals("") ? getPlayerName() : cName;
-        if (!p.getName().equals(cName))
+        if (!p.getName().equals(cName)) {
             p.sendMessage(String.format("%sは%s菌を移された", p.getName(), pName));
+        }
     }
 
     @Override
