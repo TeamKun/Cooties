@@ -3,7 +3,6 @@ package net.kunmc.lab.cooties.cooties.players;
 import net.kunmc.lab.cooties.Config;
 import net.kunmc.lab.cooties.cooties.CootiesInterface;
 import net.kunmc.lab.cooties.cooties.CootiesState;
-import net.kunmc.lab.cooties.player.PlayerProcess;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;

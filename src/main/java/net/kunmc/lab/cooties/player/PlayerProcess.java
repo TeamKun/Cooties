@@ -78,6 +78,7 @@ public class PlayerProcess {
                 actionbarMessage.add(cc.getEffectMessage());
             }
         }
+        // 〇〇するし、XXする みたいにアクションバーを表示
         if (actionbarMessage.size() > 0)
             PlayerProcess.createActionbar(p, String.join("し、", actionbarMessage));
     }
