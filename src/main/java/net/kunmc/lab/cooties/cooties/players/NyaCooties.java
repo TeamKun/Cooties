@@ -10,7 +10,7 @@ public class NyaCooties extends CootiesState implements CootiesInterface {
 
     NyaCooties(String type, int time, String playerName) {
         super(type, time, playerName);
-        setEffectMessage("〇〇にゃ としか喋られない");
+        setEffectMessage("チャットが「〇〇にゃ」になる");
     }
 
     @Override

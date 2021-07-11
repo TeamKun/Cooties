@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 public class BuriCooties extends CootiesState implements CootiesInterface {
     BuriCooties(String type, int time, String playerName) {
         super(type, time, playerName);
-        setEffectMessage("いや、〇〇だが としか喋られない");
+        setEffectMessage("チャットが「いや、〇〇だが」になる");
     }
 
     @Override
