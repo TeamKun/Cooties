@@ -1,6 +1,5 @@
 package net.kunmc.lab.cooties.event;
 
-import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kunmc.lab.cooties.Config;
 import net.kunmc.lab.cooties.cooties.CootiesConst;
 import net.kunmc.lab.cooties.cooties.CootiesContext;
@@ -8,8 +7,6 @@ import net.kunmc.lab.cooties.cooties.players.PlayerCootiesFactory;
 import net.kunmc.lab.cooties.game.GameManager;
 import net.kunmc.lab.cooties.player.PlayerProcess;
 import net.kunmc.lab.cooties.player.PlayerState;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -18,8 +15,10 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.util.Vector;
 
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 public class PlayerEventHandler implements Listener {
@@ -55,7 +54,7 @@ public class PlayerEventHandler implements Listener {
     }
 
     @EventHandler
-    public void onMoved(PlayerMoveEvent e) {
+    public void onMovedBang(PlayerMoveEvent e) {
         if (GameManager.runningMode == GameManager.GameMode.MODE_NEUTRAL)
             return;
 
@@ -80,7 +79,42 @@ public class PlayerEventHandler implements Listener {
 
         pc.get(CootiesConst.BANGCOOTIES).setShouldRun(false);
 
-        p.playSound(p.getLocation(), "minecraft:cooties.footstep", 1, 1);
+        p.getWorld().playSound(p.getLocation(), "minecraft:cooties.footstep", 1, 1);
+    }
+
+    @EventHandler
+    public void onMovedConfusion(PlayerMoveEvent e) {
+        if (GameManager.runningMode == GameManager.GameMode.MODE_NEUTRAL)
+            return;
+
+        double distanceMoved = e.getFrom().distance(e.getTo());
+        // 仕様か知らないが、移動直後のみにわずかに動くことがあるので対応
+        // 参考： スニーク時の distanceMoved が0.06程度
+        if (distanceMoved < 0.04)
+            return;
+
+        Player p = e.getPlayer();
+
+        Map<String, CootiesContext> pc = GameManager.playerStates.get(p.getUniqueId()).getCooties();
+
+        if (p.getName().equals(Config.confusionCootiesPlayerName))
+            return;
+
+        if (!pc.containsKey(CootiesConst.CONFUSIONCOOTIES))
+            return;
+
+        Vector pv = p.getVelocity();
+        double x = pv.getX();
+        double y = pv.getY();
+        double z = pv.getZ();
+        Random random = new Random();
+        if (random.nextInt(100) > 90 && Math.abs(e.getFrom().getY() - e.getTo().getY()) < 0.01) {
+            double min = -1.5;
+            double max = 1.5;
+            x += min + (max - min) * random.nextDouble();
+            z += min + (max - min) * random.nextDouble();
+            p.setVelocity(new Vector(x, y, z));
+        }
     }
 
     @EventHandler
