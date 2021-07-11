@@ -40,7 +40,10 @@ public class PlayerState implements Cloneable {
 
         // 殴った側が菌持ちだった場合は追加
         if (originCootiesPlayer.contains(player.getName())) {
-            cooties = PlayerCootiesFactory.createCooties(player.getName());
+            Map<String, CootiesContext> appendCooties = PlayerCootiesFactory.createCooties(player.getName());
+            for (CootiesContext cc : appendCooties.values()) {
+                addCooties(cc);
+            }
         }
     }
 
