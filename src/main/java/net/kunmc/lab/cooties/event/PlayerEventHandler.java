@@ -1,6 +1,7 @@
 package net.kunmc.lab.cooties.event;
 
 import net.kunmc.lab.cooties.Config;
+import net.kunmc.lab.cooties.Cooties;
 import net.kunmc.lab.cooties.cooties.CootiesConst;
 import net.kunmc.lab.cooties.cooties.CootiesContext;
 import net.kunmc.lab.cooties.cooties.players.PlayerCootiesFactory;
@@ -15,11 +16,17 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+
+import static org.bukkit.Bukkit.getLogger;
 
 public class PlayerEventHandler implements Listener {
 
@@ -151,6 +158,45 @@ public class PlayerEventHandler implements Listener {
         } else {
             GameManager.playerStates.put(targetId, new PlayerState(e.getPlayer(), PlayerCootiesFactory.createCooties(e.getPlayer().getName())));
         }
+    }
+
+    @EventHandler
+    public void onPlayerRespawn(PlayerRespawnEvent e) {
+        /**
+         * Respawn時の調整処理
+         *  ConfusionCooties のようにPotionEffectなどリスポーン時に消える処理について対応
+         */
+        if (GameManager.runningMode == GameManager.GameMode.MODE_NEUTRAL) {
+            return;
+        }
+        Player p = e.getPlayer();
+        UUID targetId = p.getUniqueId();
+        getLogger().info("BBB");
+        if (GameManager.playerStates.containsKey(targetId)) {
+            for (CootiesContext cc : GameManager.playerStates.get(targetId).getCooties().values()) {
+                getLogger().info(cc.getType());
+                if (cc.getType().equals(CootiesConst.CONFUSIONCOOTIES)) {
+                    // 単にaddPotionEffectするだけでは対応できないので、runTaskLaterする
+                    // https://www.spigotmc.org/threads/java-lang-unsupportedoperationexception-use-bukkitrunnable-runtasklater-plugin-long.396457/
+                    new ConfusionCootiesLaterTask(p, cc).runTaskLater(Cooties.getPlugin(), 1);
+                }
+            }
+        }
+    }
+}
+
+class ConfusionCootiesLaterTask extends BukkitRunnable {
+    Player p;
+    CootiesContext cc;
+
+    ConfusionCootiesLaterTask(Player p, CootiesContext cc) {
+        this.p = p;
+        this.cc = cc;
+    }
+
+    @Override
+    public void run() {
+        p.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, Config.cootiesTick - cc.getTime(), 0, false, false));
     }
 }
 
