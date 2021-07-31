@@ -1,5 +1,7 @@
 package net.kunmc.lab.cooties.player;
 
+import net.kunmc.lab.cooties.Config;
+import net.kunmc.lab.cooties.cooties.CootiesConst;
 import net.kunmc.lab.cooties.cooties.CootiesContext;
 import net.kunmc.lab.cooties.cooties.players.PlayerCootiesFactory;
 import net.kunmc.lab.cooties.util.DecolationConst;
@@ -89,10 +91,6 @@ public class PlayerState implements Cloneable {
         return player;
     }
 
-    public Map getCootiesViews() {
-        return cootiesViews;
-    }
-
     @Override
     public PlayerState clone() {
         PlayerState ps = null;
@@ -112,6 +110,15 @@ public class PlayerState implements Cloneable {
     }
 
     public void renderCootiesSentence() {
+        Map<String, String> typePlayerList = new HashMap<>();
+        typePlayerList.put(CootiesConst.BANGCOOTIES, Config.bangCootiesPlayerName);
+        typePlayerList.put(CootiesConst.BARRIERCOOTIES, Config.barrierCootiesPlayerName);
+        typePlayerList.put(CootiesConst.BURICOOTIES, Config.buriCootiesPlayerName);
+        typePlayerList.put(CootiesConst.CONFUSIONCOOTIES, Config.confusionCootiesPlayerName);
+        typePlayerList.put(CootiesConst.GAZECOOTIES, Config.gazeCootiesPlayerName);
+        typePlayerList.put(CootiesConst.KICKCOOTIES, Config.kickCootiesPlayerName);
+        typePlayerList.put(CootiesConst.NYACOOTIES, Config.nyaCootiesPlayerName);
+
         Location location = player.getLocation();
         location.setY(location.getY() + 1.5);
         for (String cootiesType : cooties.keySet()) {
@@ -120,6 +127,8 @@ public class PlayerState implements Cloneable {
 
                 // 位置を更新
                 cootiesViews.get(cootiesType).teleport(location);
+                // Configの更新などで菌の名前が合わなくなることがあるので更新する
+                cootiesViews.get(cootiesType).setCustomName(DecolationConst.GREEN + typePlayerList.get(cootiesType) + "菌");
             } else {
                 // 菌の名前を表示に持っていない場合
                 ArmorStand as = (ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND, CreatureSpawnEvent.SpawnReason.CUSTOM, entity -> {
@@ -130,7 +139,7 @@ public class PlayerState implements Cloneable {
                     armorStand.setVisible(false);
                     armorStand.setSilent(true);
                     armorStand.setGravity(false);
-                    armorStand.setCustomName(DecolationConst.GREEN + cooties.get(cootiesType).getPlayerName() + "菌");
+                    armorStand.setCustomName(DecolationConst.GREEN + typePlayerList.get(cootiesType) + "菌");
                     armorStand.setCustomNameVisible(true);
                 });
                 cootiesViews.put(cootiesType, as);
