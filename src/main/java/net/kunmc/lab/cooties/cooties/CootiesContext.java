@@ -52,4 +52,8 @@ public class CootiesContext {
     public String getEffectMessage() {
         return ci.getEffectMessage();
     }
+
+    public String getPlayerName() {
+        return ci.getPlayerName();
+    }
 }

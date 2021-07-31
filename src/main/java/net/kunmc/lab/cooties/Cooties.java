@@ -3,6 +3,8 @@ package net.kunmc.lab.cooties;
 import net.kunmc.lab.cooties.command.CommandConst;
 import net.kunmc.lab.cooties.command.CommandController;
 import net.kunmc.lab.cooties.event.PlayerEventHandler;
+import net.kunmc.lab.cooties.game.GameManager;
+import net.kunmc.lab.cooties.player.PlayerState;
 import net.kunmc.lab.cooties.task.Task;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
@@ -29,6 +31,11 @@ public final class Cooties extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (GameManager.playerStates != null) {
+            for (PlayerState ps : GameManager.playerStates.values()) {
+                ps.removeAllCootiesViews();
+            }
+        }
         getLogger().info("Cooties Plugin is disabled");
     }
 }

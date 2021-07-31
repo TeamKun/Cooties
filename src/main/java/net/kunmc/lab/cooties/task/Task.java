@@ -44,6 +44,9 @@ public class Task extends BukkitRunnable {
                 cc.stopCootiesProcess(p);
                 ps.removeCooties(cc.getType());
             }
+            // 菌の表示
+            if (!p.isDead())
+                ps.renderCootiesSentence();
         }
     }
 }

@@ -15,7 +15,9 @@ public class NyaCooties extends CootiesState implements CootiesInterface {
 
     @Override
     public void runCootiesProcess(Player p) {
-        p.getLocation().getWorld().spawnParticle(Particle.SPELL_INSTANT, p.getEyeLocation(), 1, 1.0, 1.0, 1.0);
+        if (getParticleTime() % 4 == 0)
+            p.getLocation().getWorld().spawnParticle(Particle.SPELL_INSTANT, p.getEyeLocation(), 1, 0.8, 0.8, 0.8);
+        setParticleTime(getParticleTime() + 1);
         if (p.getName().equals(Config.nyaCootiesPlayerName))
             return;
 

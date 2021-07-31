@@ -17,7 +17,9 @@ public class ConfusionCooties extends CootiesState implements CootiesInterface {
 
     @Override
     public void runCootiesProcess(Player p) {
-        p.getLocation().getWorld().spawnParticle(Particle.TOTEM, p.getEyeLocation(), 1, 0.5, 1.0, 0.5);
+        if (getParticleTime() % 4 == 0)
+            p.getLocation().getWorld().spawnParticle(Particle.TOTEM, p.getEyeLocation(), 1, 0.5, 0.8, 0.5);
+        setParticleTime(getParticleTime() + 1);
         if (p.getName().equals(Config.confusionCootiesPlayerName))
             return;
 

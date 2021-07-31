@@ -27,4 +27,5 @@ public interface CootiesInterface {
 
     void setShouldRun(boolean flag);
     String getEffectMessage();
+    String getPlayerName();
 }

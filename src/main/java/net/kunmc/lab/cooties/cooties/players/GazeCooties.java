@@ -21,7 +21,9 @@ public class GazeCooties extends CootiesState implements CootiesInterface {
 
     @Override
     public void runCootiesProcess(Player p) {
-        p.getLocation().getWorld().spawnParticle(Particle.HEART, p.getEyeLocation(), 1, 1.0, 1.0, 1.0);
+        if (getParticleTime() % 4 == 0)
+            p.getLocation().getWorld().spawnParticle(Particle.HEART, p.getEyeLocation(), 1, 0.8, 0.8, 0.8);
+        setParticleTime(getParticleTime() + 1);
         String playerName = p.getName();
         if (playerName.equals(Config.gazeCootiesPlayerName))
             return;

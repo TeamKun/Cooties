@@ -1,5 +1,6 @@
 package net.kunmc.lab.cooties.game;
 
+import net.kunmc.lab.cooties.cooties.CootiesContext;
 import net.kunmc.lab.cooties.player.PlayerProcess;
 import net.kunmc.lab.cooties.player.PlayerState;
 
@@ -9,6 +10,7 @@ import java.util.UUID;
 public class GameManager {
     // 動作中のモード保持
     public static GameMode runningMode = GameMode.MODE_NEUTRAL;
+
     public static Map<UUID, PlayerState> playerStates;
 
     public static void controller(GameMode runningMode) {
@@ -20,6 +22,12 @@ public class GameManager {
                 playerStates = PlayerProcess.initPlayerState();
                 break;
             case MODE_NEUTRAL:
+                for (PlayerState ps : playerStates.values()) {
+                    ps.removeAllCootiesViews();
+                    for (CootiesContext cc : ps.getCooties().values()) {
+                        cc.stopCootiesProcess(ps.getPlayer());
+                    }
+                }
                 playerStates = null;
                 break;
         }

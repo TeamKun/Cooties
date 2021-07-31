@@ -5,6 +5,8 @@ public class CootiesState {
     String type;
     // 菌の保持時間
     int time;
+    // particleの管理時間
+    int particleTime;
     // 菌元プレイヤー（特定条件下で使用）
     String playerName;
     // 菌の初期処理をするかどうかのフラグ
@@ -21,6 +23,7 @@ public class CootiesState {
         this.playerName = playerName;
         isInit = true;
         shouldRun = true;
+        particleTime = 0;
     }
 
     public String getType() {
@@ -65,5 +68,13 @@ public class CootiesState {
 
     public String getEffectMessage() {
         return effectMessage;
+    }
+
+    public void setParticleTime(int time) {
+        particleTime = time;
+    }
+
+    public int getParticleTime() {
+        return particleTime;
     }
 }

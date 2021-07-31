@@ -13,10 +13,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -171,7 +169,6 @@ public class PlayerEventHandler implements Listener {
         }
         Player p = e.getPlayer();
         UUID targetId = p.getUniqueId();
-        getLogger().info("BBB");
         if (GameManager.playerStates.containsKey(targetId)) {
             for (CootiesContext cc : GameManager.playerStates.get(targetId).getCooties().values()) {
                 getLogger().info(cc.getType());
@@ -181,6 +178,32 @@ public class PlayerEventHandler implements Listener {
                     new ConfusionCootiesLaterTask(p, cc).runTaskLater(Cooties.getPlugin(), 1);
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerLogout(PlayerQuitEvent e) {
+        /**
+         * Logout時の挙動
+         *   菌名の表示が残るので削除しておく
+         */
+        Player p = e.getPlayer();
+        UUID targetId = p.getUniqueId();
+        if (GameManager.playerStates.containsKey(targetId)) {
+            GameManager.playerStates.get(targetId).removeAllCootiesViews();
+        }
+    }
+
+    @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent e) {
+        /**
+         * Death時の挙動
+         *   菌名の表示が残るので削除しておく
+         */
+        Player p = e.getEntity().getPlayer();
+        UUID targetId = p.getUniqueId();
+        if (GameManager.playerStates.containsKey(targetId)) {
+            GameManager.playerStates.get(targetId).removeAllCootiesViews();
         }
     }
 }
