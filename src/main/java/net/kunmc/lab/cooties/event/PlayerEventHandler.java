@@ -150,6 +150,7 @@ public class PlayerEventHandler implements Listener {
                     PlayerState newPlayerState = new PlayerState(e.getPlayer(), targetPlayerState.getCooties());
                     GameManager.playerStates.remove(id);
                     GameManager.playerStates.put(id, newPlayerState);
+                    GameManager.playerStates.get(id).addAllPassenger();
                     break;
                 }
             }
@@ -163,21 +164,51 @@ public class PlayerEventHandler implements Listener {
         /**
          * Respawn時の調整処理
          *  ConfusionCooties のようにPotionEffectなどリスポーン時に消える処理について対応
+         *  保持している菌の名前をkill時に削除しているのでここで再投入する
          */
+
         if (GameManager.runningMode == GameManager.GameMode.MODE_NEUTRAL) {
             return;
         }
+
+        // ログイン時にすでに登録されているならゲーム復帰するようにする
+        //UUID targetId = e.getPlayer().getUniqueId();
+        //if (GameManager.playerStates.containsKey(targetId)) {
+        //    for (UUID id : GameManager.playerStates.keySet()) {
+        //        // 同一IDなら一度情報を消して再入力
+        //        if (id.equals(targetId)) {
+        //            PlayerState targetPlayerState = GameManager.playerStates.get(id);
+        //            PlayerState newPlayerState = new PlayerState(e.getPlayer(), targetPlayerState.getCooties());
+        //            GameManager.playerStates.remove(id);
+        //            GameManager.playerStates.put(id, newPlayerState);
+        //            GameManager.playerStates.get(id).addAllPassenger();
+        //            for (CootiesContext cc : GameManager.playerStates.get(targetId).getCooties().values()) {
+        //                if (cc.getType().equals(CootiesConst.CONFUSIONCOOTIES)) {
+        //                    // 単にaddPotionEffectするだけでは対応できないので、runTaskLaterする
+        //                    // https://www.spigotmc.org/threads/java-lang-unsupportedoperationexception-use-bukkitrunnable-runtasklater-plugin-long.396457/
+        //                    new ConfusionCootiesLaterTask(e.getPlayer(), cc).runTaskLater(Cooties.getPlugin(), 1);
+        //                }
+        //            }
+        //            break;
+        //        }
+        //    }
+        //} else {
+        //    GameManager.playerStates.put(targetId, new PlayerState(e.getPlayer(), PlayerCootiesFactory.createCooties(e.getPlayer().getName())));
+        //}
+        //if (GameManager.runningMode == GameManager.GameMode.MODE_NEUTRAL) {
+        //    return;
+        //}
         Player p = e.getPlayer();
         UUID targetId = p.getUniqueId();
         if (GameManager.playerStates.containsKey(targetId)) {
             for (CootiesContext cc : GameManager.playerStates.get(targetId).getCooties().values()) {
-                getLogger().info(cc.getType());
                 if (cc.getType().equals(CootiesConst.CONFUSIONCOOTIES)) {
                     // 単にaddPotionEffectするだけでは対応できないので、runTaskLaterする
                     // https://www.spigotmc.org/threads/java-lang-unsupportedoperationexception-use-bukkitrunnable-runtasklater-plugin-long.396457/
                     new ConfusionCootiesLaterTask(p, cc).runTaskLater(Cooties.getPlugin(), 1);
                 }
             }
+            GameManager.playerStates.get(targetId).addAllPassenger();
         }
     }
 
@@ -190,7 +221,7 @@ public class PlayerEventHandler implements Listener {
         Player p = e.getPlayer();
         UUID targetId = p.getUniqueId();
         if (GameManager.playerStates.containsKey(targetId)) {
-            GameManager.playerStates.get(targetId).removeAllCootiesViews();
+            GameManager.playerStates.get(targetId).removeAllPassengerRecursive(GameManager.playerStates.get(targetId).getFirstAec());
         }
     }
 
@@ -203,7 +234,7 @@ public class PlayerEventHandler implements Listener {
         Player p = e.getEntity().getPlayer();
         UUID targetId = p.getUniqueId();
         if (GameManager.playerStates.containsKey(targetId)) {
-            GameManager.playerStates.get(targetId).removeAllCootiesViews();
+            GameManager.playerStates.get(targetId).removeAllPassenger();
         }
     }
 }
@@ -222,4 +253,3 @@ class ConfusionCootiesLaterTask extends BukkitRunnable {
         p.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, Config.cootiesTick - cc.getTime(), 0, false, false));
     }
 }
-

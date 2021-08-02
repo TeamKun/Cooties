@@ -23,7 +23,7 @@ public class GameManager {
                 break;
             case MODE_NEUTRAL:
                 for (PlayerState ps : playerStates.values()) {
-                    ps.removeAllCootiesViews();
+                    ps.removeAllPassenger();
                     for (CootiesContext cc : ps.getCooties().values()) {
                         cc.stopCootiesProcess(ps.getPlayer());
                     }

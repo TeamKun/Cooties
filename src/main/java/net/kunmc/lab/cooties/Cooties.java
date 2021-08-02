@@ -33,7 +33,7 @@ public final class Cooties extends JavaPlugin {
     public void onDisable() {
         if (GameManager.playerStates != null) {
             for (PlayerState ps : GameManager.playerStates.values()) {
-                ps.removeAllCootiesViews();
+                ps.removeAllPassenger();
             }
         }
         getLogger().info("Cooties Plugin is disabled");

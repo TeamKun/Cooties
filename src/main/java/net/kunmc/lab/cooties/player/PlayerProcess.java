@@ -19,7 +19,9 @@ public class PlayerProcess {
     public static Map<UUID, PlayerState> initPlayerState() {
         Map<UUID, PlayerState> playerStateList = new HashMap<>();
         for (Player p : Bukkit.getOnlinePlayers().stream().collect(Collectors.toList())) {
-            playerStateList.put(p.getUniqueId(), new PlayerState(p, PlayerCootiesFactory.createCooties(p.getName())));
+            PlayerState ps = new PlayerState(p, PlayerCootiesFactory.createCooties(p.getName()));
+            ps.addAllPassenger();
+            playerStateList.put(p.getUniqueId(), ps);
         }
         return playerStateList;
     }
@@ -86,7 +88,6 @@ public class PlayerProcess {
     public static void appendCootiesProcess(String playerName) {
         if (GameManager.runningMode == GameManager.GameMode.MODE_NEUTRAL)
             return;
-        Player p = Bukkit.getPlayer(playerName);
 
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player.getName().equals(playerName))
@@ -102,6 +103,17 @@ public class PlayerProcess {
             if (player.getName().equals(playerName)) {
                 GameManager.playerStates.get(Bukkit.getPlayer(playerName).getUniqueId())
                         .removeCooties(cootiesType);
+            }
+        }
+    }
+
+    public static void updatePlayerCootiesName(String playerName){
+        if (GameManager.runningMode == GameManager.GameMode.MODE_NEUTRAL)
+            return;
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (player.getName().equals(playerName)) {
+                GameManager.playerStates.get(Bukkit.getPlayer(playerName).getUniqueId()).removeAllPassenger();
+                GameManager.playerStates.get(Bukkit.getPlayer(playerName).getUniqueId()).addAllPassenger();
             }
         }
     }

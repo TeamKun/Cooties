@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.bukkit.Bukkit.getLogger;
+
 public class Task extends BukkitRunnable {
     private JavaPlugin plugin;
 
@@ -44,9 +46,6 @@ public class Task extends BukkitRunnable {
                 cc.stopCootiesProcess(p);
                 ps.removeCooties(cc.getType());
             }
-            // 菌の表示
-            if (!p.isDead())
-                ps.renderCootiesSentence();
         }
     }
 }
