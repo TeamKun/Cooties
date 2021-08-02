@@ -6,6 +6,8 @@ import net.kunmc.lab.cooties.cooties.CootiesState;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
+import static org.bukkit.Bukkit.getLogger;
+
 public class BangCooties extends CootiesState implements CootiesInterface {
     private int bangTime = 1;
 
@@ -16,6 +18,7 @@ public class BangCooties extends CootiesState implements CootiesInterface {
 
     @Override
     public void runCootiesProcess(Player p) {
+        getLogger().info(Integer.toString(getTime()));
         if (getParticleTime() % 4 == 0)
             p.getLocation().getWorld().spawnParticle(Particle.COMPOSTER, p.getEyeLocation(), 1, 0.8, 0.8, 0.8);
         setParticleTime(getParticleTime()+1);

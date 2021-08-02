@@ -45,7 +45,7 @@ public class PlayerState implements Cloneable {
         return cooties;
     }
 
-    public void clearCootiesWhenTouch(Player touchedPlayer, List originCootiesPlayer) {
+    public void clearCootiesWhenTouch(Player touchedPlayer, Map typePlayerList) {
         /**
          * 相手を触った時に自身の菌を綺麗にする。
          *   - 触った相手が常時菌を持つPlayerの場合は対応する菌を削除しない(菌をもっている時に菌保持者から菌をうつされることはない)
@@ -53,39 +53,39 @@ public class PlayerState implements Cloneable {
          */
         List<CootiesContext> willRemove = new ArrayList<>();
         for (CootiesContext cc : cooties.values()) {
-            if (!originCootiesPlayer.contains(touchedPlayer.getName())) {
+            if (typePlayerList.containsKey(cc.getType()) && typePlayerList.get(cc.getType()).equals(touchedPlayer.getName()))
+                continue;
                 cc.stopCootiesProcess(player);
                 willRemove.add(cc);
-            }
         }
+
         for (CootiesContext cc : willRemove) {
-            removeCooties(cc.getType());
+            if (typePlayerList.containsKey(cc.getType()) && typePlayerList.get(cc.getType()).equals(player.getName())){
+                removeCooties(cc.getType(), false);
+            } else {
+                removeCooties(cc.getType(), true);
+            }
         }
 
         // 殴った側が菌持ちだった場合は追加
-        if (originCootiesPlayer.contains(player.getName())) {
+        if (typePlayerList.values().contains(player.getName())) {
             Map<String, CootiesContext> appendCooties = PlayerCootiesFactory.createCooties(player.getName());
             for (CootiesContext cc : appendCooties.values()) {
-                addCooties(cc);
+                addCooties(cc, false);
             }
         }
     }
 
-    public void removeCooties(String cootiesType) {
+    public void removeCooties(String cootiesType, boolean updatePassenger) {
         /**
          * 菌の削除
          */
         if (!cooties.containsKey(cootiesType))
             return;
 
-        //loggingPassenger(player);
-        //getLogger().info(passengersList.toString());
         cooties.remove(cootiesType);
-        //removeAllPassenger();
-        //addAllPassenger();
-        //getLogger().info("Remove");
-        removePassenger(player, null, cootiesType);
-        //loggingPassenger(player);
+        if (updatePassenger)
+            removePassenger(player, null, cootiesType);
     }
 
     /**
@@ -94,7 +94,7 @@ public class PlayerState implements Cloneable {
      * @param cooties
      * @return
      */
-    public boolean addCooties(CootiesContext cooties) {
+    public boolean addCooties(CootiesContext cooties, boolean updatePassenger) {
         /**
          * 菌の追加、別Playerからの受け渡し時に使用されることを想定
          *   受け渡しがされる場合は初期に実行される処理を行う
@@ -102,10 +102,12 @@ public class PlayerState implements Cloneable {
         if (this.cooties.containsKey(cooties.getType()))
             return false;
         this.cooties.put(cooties.getType(), cooties);
-        Entity topEntity = getTopPassenger(player);
-        ArmorStand as = createCootiesNameEntity(topEntity.getLocation(), cooties.getType());
-        topEntity.addPassenger(as);
-        passengersList.put(cooties.getType(), as);
+        if (updatePassenger) {
+            Entity topEntity = getTopPassenger(player);
+            ArmorStand as = createCootiesNameEntity(topEntity.getLocation(), cooties.getType());
+            topEntity.addPassenger(as);
+            passengersList.put(cooties.getType(), as);
+        }
 
         cooties.setIsInit(true);
         return true;
