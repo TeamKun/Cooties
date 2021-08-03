@@ -4,7 +4,6 @@ import net.kunmc.lab.cooties.Config;
 import net.kunmc.lab.cooties.cooties.CootiesConst;
 import net.kunmc.lab.cooties.game.GameManager;
 import net.kunmc.lab.cooties.player.PlayerProcess;
-import net.kunmc.lab.cooties.player.PlayerState;
 import net.kunmc.lab.cooties.util.DecolationConst;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -180,6 +179,10 @@ public class CommandController implements CommandExecutor, TabCompleter {
                     }
                     break;
                 case CommandConst.COMMAND_CONFIG_BARRIER_COOTIES_PLAYER:
+                    if (Config.barrierCootiesPlayerName.equals(args[2])){
+                        sender.sendMessage(DecolationConst.AQUA + "同名プレイヤーが既に設定されています");
+                        return;
+                    }
                     PlayerProcess.removeCootiesProcess(Config.barrierCootiesPlayerName, CootiesConst.BURICOOTIES);
                     Config.barrierCootiesPlayerName = args[2].equals(CommandConst.COMMAND_CONFIG_OFF) ? "" : args[2];
                     if (! args[2].equals(CommandConst.COMMAND_CONFIG_OFF)) {
@@ -188,7 +191,11 @@ public class CommandController implements CommandExecutor, TabCompleter {
                     }
                     break;
                 case CommandConst.COMMAND_CONFIG_CONFUSION_COOTIES_PLAYER:
-                    PlayerProcess.removeCootiesProcess(Config.barrierCootiesPlayerName, CootiesConst.BURICOOTIES);
+                    if (Config.confusionCootiesPlayerName.equals(args[2])){
+                        sender.sendMessage(DecolationConst.AQUA + "同名プレイヤーが既に設定されています");
+                        return;
+                    }
+                    PlayerProcess.removeCootiesProcess(Config.confusionCootiesPlayerName, CootiesConst.CONFUSIONCOOTIES);
                     Config.confusionCootiesPlayerName = args[2].equals(CommandConst.COMMAND_CONFIG_OFF) ? "" : args[2];
                     if (! args[2].equals(CommandConst.COMMAND_CONFIG_OFF)) {
                         PlayerProcess.appendCootiesProcess(args[2]);
@@ -196,7 +203,11 @@ public class CommandController implements CommandExecutor, TabCompleter {
                     }
                     break;
                 case CommandConst.COMMAND_CONFIG_GAZE_COOTIES_PLAYER:
-                    PlayerProcess.removeCootiesProcess(Config.barrierCootiesPlayerName, CootiesConst.BURICOOTIES);
+                    if (Config.gazeCootiesPlayerName.equals(args[2])){
+                        sender.sendMessage(DecolationConst.AQUA + "同名プレイヤーが既に設定されています");
+                        return;
+                    }
+                    PlayerProcess.removeCootiesProcess(Config.gazeTargetPlayerName, CootiesConst.GAZECOOTIES);
                     Config.gazeCootiesPlayerName = args[2].equals(CommandConst.COMMAND_CONFIG_OFF) ? "" : args[2];
                     if (! args[2].equals(CommandConst.COMMAND_CONFIG_OFF)) {
                         PlayerProcess.appendCootiesProcess(args[2]);
@@ -204,7 +215,11 @@ public class CommandController implements CommandExecutor, TabCompleter {
                     }
                     break;
                 case CommandConst.COMMAND_CONFIG_KICK_COOTIES_PLAYER:
-                    PlayerProcess.removeCootiesProcess(Config.barrierCootiesPlayerName, CootiesConst.BURICOOTIES);
+                    if (Config.kickCootiesPlayerName.equals(args[2])){
+                        sender.sendMessage(DecolationConst.AQUA + "同名プレイヤーが既に設定されています");
+                        return;
+                    }
+                    PlayerProcess.removeCootiesProcess(Config.kickCootiesPlayerName, CootiesConst.KICKCOOTIES);
                     Config.kickCootiesPlayerName = args[2].equals(CommandConst.COMMAND_CONFIG_OFF) ? "" : args[2];
                     if (! args[2].equals(CommandConst.COMMAND_CONFIG_OFF)) {
                         PlayerProcess.appendCootiesProcess(args[2]);
@@ -212,7 +227,7 @@ public class CommandController implements CommandExecutor, TabCompleter {
                     }
                     break;
                 case CommandConst.COMMAND_CONFIG_NYA_COOTIES_PLAYER:
-                    PlayerProcess.removeCootiesProcess(Config.barrierCootiesPlayerName, CootiesConst.BURICOOTIES);
+                    PlayerProcess.removeCootiesProcess(Config.nyaCootiesPlayerName, CootiesConst.NYACOOTIES);
                     Config.nyaCootiesPlayerName = args[2].equals(CommandConst.COMMAND_CONFIG_OFF) ? "" : args[2];
                     if (! args[2].equals(CommandConst.COMMAND_CONFIG_OFF)) {
                         PlayerProcess.appendCootiesProcess(args[2]);

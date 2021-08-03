@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.bukkit.Bukkit.getLogger;
-
 public class Task extends BukkitRunnable {
     private JavaPlugin plugin;
 
@@ -28,6 +26,9 @@ public class Task extends BukkitRunnable {
 
         // Playerの更新処理を実行
         for (Player p : Bukkit.getOnlinePlayers().stream().collect(Collectors.toList())) {
+            if (GameManager.team != null && !GameManager.team.getEntries().contains(p.getName())){
+                GameManager.team.addEntry(p.getName());
+            }
             PlayerState ps = GameManager.playerStates.get(p.getUniqueId());
             if (ps == null)
                 continue;
@@ -45,6 +46,11 @@ public class Task extends BukkitRunnable {
             for (CootiesContext cc : shouldRemoveCooties) {
                 cc.stopCootiesProcess(p);
                 ps.removeCooties(cc.getType(), true);
+            }
+            if (ps.passerngerReset) {
+                ps.removeAllPassenger();
+                ps.addAllPassenger();
+                ps.passerngerReset = false;
             }
         }
     }

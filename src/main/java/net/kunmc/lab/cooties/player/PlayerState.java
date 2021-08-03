@@ -4,8 +4,11 @@ import net.kunmc.lab.cooties.Config;
 import net.kunmc.lab.cooties.cooties.CootiesConst;
 import net.kunmc.lab.cooties.cooties.CootiesContext;
 import net.kunmc.lab.cooties.cooties.players.PlayerCootiesFactory;
+import net.kunmc.lab.cooties.game.GameManager;
 import net.kunmc.lab.cooties.util.DecolationConst;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
@@ -24,6 +27,8 @@ public class PlayerState implements Cloneable {
     AreaEffectCloud firstAec;
     // passengerから特定の菌を削除する際にCustomNameベースでの削除しかできないので、削除を管理するリストを設ける
     Map<String, Entity> passengersList;
+    // AreaEffectCloudで謎の黒いパーティクルが常時出てしまうので、reset flagを用意する
+    public boolean passerngerReset;
 
     public PlayerState(Player player, Map<String, CootiesContext> cooties) {
         this.player = player;
@@ -35,6 +40,7 @@ public class PlayerState implements Cloneable {
             getTopPassenger(this.player).addPassenger(createAec());
         }
         passengersList = new HashMap<>();
+        passerngerReset = false;
     }
 
     public AreaEffectCloud getFirstAec(){
@@ -129,7 +135,7 @@ public class PlayerState implements Cloneable {
     }
 
     private AreaEffectCloud createAec(){
-        AreaEffectCloud aec = player.getLocation().getWorld().spawn(player.getLocation(), AreaEffectCloud.class);
+        AreaEffectCloud aec = (AreaEffectCloud) player.getLocation().getWorld().spawnEntity(player.getLocation(), EntityType.AREA_EFFECT_CLOUD);
         aec.setDuration(999999999);
         aec.setRadius(0);
         return aec;
@@ -200,20 +206,22 @@ public class PlayerState implements Cloneable {
             return;
         }
         removeAllPassengerRecursive(entity.getPassengers().get(0));
-        if ((entity.getPassengers().get(0) instanceof ArmorStand)) {
-            entity.getPassengers().get(0).remove();
-            entity.removePassenger(entity.getPassengers().get(0));
-        }
+        entity.getPassengers().get(0).remove();
+        entity.removePassenger(entity.getPassengers().get(0));
     }
 
     public void addAllPassenger(){
+        if (this.player.getPassengers().isEmpty()) {
+            firstAec = createAec();
+            getTopPassenger(this.player).addPassenger(firstAec);
+            getTopPassenger(this.player).addPassenger(createAec());
+        }
         for(CootiesContext cc: cooties.values()){
             ArmorStand as = createCootiesNameEntity(getTopPassenger(player).getLocation(), cc.getType());
             getTopPassenger(player).addPassenger(as);
             passengersList.put(cc.getType(), as);
         }
     }
-
     private Entity loggingPassenger(Entity entity) {
         getLogger().info(entity.getName());
         if (entity.getPassengers().isEmpty()) {

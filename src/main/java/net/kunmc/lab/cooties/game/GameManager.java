@@ -3,6 +3,10 @@ package net.kunmc.lab.cooties.game;
 import net.kunmc.lab.cooties.cooties.CootiesContext;
 import net.kunmc.lab.cooties.player.PlayerProcess;
 import net.kunmc.lab.cooties.player.PlayerState;
+import org.bukkit.Bukkit;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 import java.util.Map;
 import java.util.UUID;
@@ -12,6 +16,7 @@ public class GameManager {
     public static GameMode runningMode = GameMode.MODE_NEUTRAL;
 
     public static Map<UUID, PlayerState> playerStates;
+    public static Team team = null;
 
     public static void controller(GameMode runningMode) {
         // モードを設定
@@ -19,6 +24,12 @@ public class GameManager {
 
         switch (runningMode) {
             case MODE_START:
+                String boardName = "Cooties";
+                Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+                Team objective = scoreboard.getTeam(boardName);
+                if (objective == null) {
+                    team = scoreboard.registerNewTeam(boardName);
+                }
                 playerStates = PlayerProcess.initPlayerState();
                 break;
             case MODE_NEUTRAL:

@@ -150,12 +150,15 @@ public class PlayerEventHandler implements Listener {
                     PlayerState newPlayerState = new PlayerState(e.getPlayer(), targetPlayerState.getCooties());
                     GameManager.playerStates.remove(id);
                     GameManager.playerStates.put(id, newPlayerState);
+                    GameManager.playerStates.get(id).removeAllPassengerRecursive(GameManager.playerStates.get(id).getFirstAec());
                     GameManager.playerStates.get(id).addAllPassenger();
                     break;
                 }
             }
+            GameManager.playerStates.get(targetId).passerngerReset = true;
         } else {
             GameManager.playerStates.put(targetId, new PlayerState(e.getPlayer(), PlayerCootiesFactory.createCooties(e.getPlayer().getName())));
+            GameManager.playerStates.get(targetId).passerngerReset = true;
         }
     }
 
@@ -171,33 +174,6 @@ public class PlayerEventHandler implements Listener {
             return;
         }
 
-        // ログイン時にすでに登録されているならゲーム復帰するようにする
-        //UUID targetId = e.getPlayer().getUniqueId();
-        //if (GameManager.playerStates.containsKey(targetId)) {
-        //    for (UUID id : GameManager.playerStates.keySet()) {
-        //        // 同一IDなら一度情報を消して再入力
-        //        if (id.equals(targetId)) {
-        //            PlayerState targetPlayerState = GameManager.playerStates.get(id);
-        //            PlayerState newPlayerState = new PlayerState(e.getPlayer(), targetPlayerState.getCooties());
-        //            GameManager.playerStates.remove(id);
-        //            GameManager.playerStates.put(id, newPlayerState);
-        //            GameManager.playerStates.get(id).addAllPassenger();
-        //            for (CootiesContext cc : GameManager.playerStates.get(targetId).getCooties().values()) {
-        //                if (cc.getType().equals(CootiesConst.CONFUSIONCOOTIES)) {
-        //                    // 単にaddPotionEffectするだけでは対応できないので、runTaskLaterする
-        //                    // https://www.spigotmc.org/threads/java-lang-unsupportedoperationexception-use-bukkitrunnable-runtasklater-plugin-long.396457/
-        //                    new ConfusionCootiesLaterTask(e.getPlayer(), cc).runTaskLater(Cooties.getPlugin(), 1);
-        //                }
-        //            }
-        //            break;
-        //        }
-        //    }
-        //} else {
-        //    GameManager.playerStates.put(targetId, new PlayerState(e.getPlayer(), PlayerCootiesFactory.createCooties(e.getPlayer().getName())));
-        //}
-        //if (GameManager.runningMode == GameManager.GameMode.MODE_NEUTRAL) {
-        //    return;
-        //}
         Player p = e.getPlayer();
         UUID targetId = p.getUniqueId();
         if (GameManager.playerStates.containsKey(targetId)) {
@@ -208,7 +184,7 @@ public class PlayerEventHandler implements Listener {
                     new ConfusionCootiesLaterTask(p, cc).runTaskLater(Cooties.getPlugin(), 1);
                 }
             }
-            GameManager.playerStates.get(targetId).addAllPassenger();
+            GameManager.playerStates.get(targetId).passerngerReset = true;
         }
     }
 
