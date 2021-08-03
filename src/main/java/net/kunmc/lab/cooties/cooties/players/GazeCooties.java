@@ -6,6 +6,7 @@ import net.kunmc.lab.cooties.cooties.CootiesState;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 
@@ -48,8 +49,9 @@ public class GazeCooties extends CootiesState implements CootiesInterface {
             targetPlayer = Bukkit.getPlayer(Config.gazeTargetPlayerName);
         }
 
-        if (getTime() % 5 == 0 && targetPlayer != null)
+        if (getTime() % 5 == 0 && targetPlayer != null) {
             lookAtPlayer(p, targetPlayer);
+        }
 
         setTime(getTime() + 1);
     }
@@ -119,6 +121,11 @@ public class GazeCooties extends CootiesState implements CootiesInterface {
         Location loc = p.getLocation();
         loc.setYaw((float) yaw);
         loc.setPitch((float) pitch);
+
+        // passerngerをremoveしないとTPできないようなので一時的に削除する
+        Entity tmp = p.getPassengers().get(0);
+        p.removePassenger(tmp);
         p.teleport(loc);
+        p.addPassenger(tmp);
     }
 }
