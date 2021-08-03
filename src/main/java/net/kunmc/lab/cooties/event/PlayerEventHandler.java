@@ -202,6 +202,19 @@ public class PlayerEventHandler implements Listener {
     }
 
     @EventHandler
+    public void onKickout(PlayerKickEvent e) {
+        /**
+         * Logout時の挙動
+         *   菌名の表示が残るので削除しておく
+         */
+        Player p = e.getPlayer();
+        UUID targetId = p.getUniqueId();
+        if (GameManager.playerStates.containsKey(targetId)) {
+            GameManager.playerStates.get(targetId).removeAllPassengerRecursive(GameManager.playerStates.get(targetId).getFirstAec());
+        }
+    }
+
+    @EventHandler
     public void onPlayerDeath(PlayerDeathEvent e) {
         /**
          * Death時の挙動
